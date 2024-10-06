@@ -4,11 +4,23 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const path = require('path');
 const cors = require('cors');
+const mysql = require('mysql2')
 
 const app = express();
 const http = require('http').createServer(app);
 
 dotenv.config();
+
+// mysql 연결
+var conn = mysql.createConnection({ 
+  host : 'localhost',  
+  user : 'root',
+  password : process.env.MYSQLPASS,
+  database : 'online_db'
+});
+
+conn.connect();
+module.exports = conn;
 
 // 라우터 가져오기
 const mainRouter = require('./routes/index');
