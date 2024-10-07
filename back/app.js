@@ -15,6 +15,18 @@ const io = require('socket.io')(http, {cors: {
 });
 
 // connection event handler
+io.on('connection', (socket) => {
+  console.log('A client has connected');
+  
+  socket.on('message', (message) => {
+    console.log(`Received message: ${message}`);
+    socket.emit('message', message);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('A client has disconnected');
+  });
+});
 // io.on('connection', function(socket) {
 //     // 접속한 클라이언트의 정보가 수신되면
 //     socket.on('login', function(data) {
@@ -62,18 +74,7 @@ const io = require('socket.io')(http, {cors: {
 //       console.log('user disconnected: ' + socket.name);
 //     });
 // });
-io.on('connection', (socket) => {
-  console.log('A client has connected');
-  
-  socket.on('message', (message) => {
-    console.log(`Received message: ${message}`);
-    socket.emit('message', message);
-  });
 
-  socket.on('disconnect', () => {
-    console.log('A client has disconnected');
-  });
-});
 
 dotenv.config();
 
