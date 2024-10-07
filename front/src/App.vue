@@ -1,38 +1,22 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <input v-model="Text" />
-  <button @click="sendMessage">Send a message</button>
+  <!-- <input v-model="Text" />
+  <button @click="sendMessage">Send a message</button> -->
 </template>
 
 
 <script setup>
-// import { inject, ref } from "vue";
-import { ref } from "vue";
-// import { onMessage, onOpen, onClose, onError } from "vue3-websocket";
+import { io } from 'socket.io-client';
 
-// const text = ref('');
-const responseMsg = ref('');
-// const socket = inject('socket');
-// const sendMessage = () => socket.value.send(text.value);
-const ws = new WebSocket('wss://localhost:8000');
-// 혹은 http ssl이 아니라면
-// const ws = new WebSocket('ws://example.com');
+const socket = io('http://localhost:8000');
 
-ws.onopen = (event) => {
-  console.log(event);
-  console.log('WebSocket connection is stable!');  
-}
-ws.onmessage = (message) => {
-  responseMsg.value = message.data;
-  console.log('Got a message from the WebSocket: ', message);
-};
-ws.onclose = (event) => {
-  console.log(event);
-  console.log('Connection has been closed');
-};
-ws.onerror = (error) => {
-  console.error('WebSocket error: ', error);
-};
+socket.on('connect', () => {
+  console.log('Connected to server');
+  socket.emit('message', 'Hi! i am client');
+});
+socket.on('message', (message) => {
+  console.log(`Received message: ${message}`);
+});
 </script> 
 
 
