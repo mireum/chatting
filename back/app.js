@@ -14,10 +14,11 @@ const io = require('socket.io')(http, {cors: {
   }
 });
 
-// connection event handler
+// 클라이언트와 연결되면 실행되는 이벤트
 io.on('connection', (socket) => {
   console.log('A client has connected');
   
+  // 클라이언트가 message라는 이벤트를 발생시키면 해당 메시지를 수신한다.
   socket.on('message', (message) => {
     console.log(`Received message: ${message}`);
     socket.emit('message', message);
