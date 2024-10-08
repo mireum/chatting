@@ -13,6 +13,10 @@ const io = require('socket.io')(http, {cors: {
   origin: "*"
   }
 });
+// 네임스페이스 이벤트. room, chat이라는 io 객체를 만든다.
+// 서로 독립적인 공간이므로 io는 실행되지 않는다.
+const room = io.of("/room");
+const chat = io.of("/chat");
 
 // 클라이언트와 연결되면 실행되는 이벤트
 io.on('connection', (socket) => {
@@ -28,6 +32,31 @@ io.on('connection', (socket) => {
     console.log('A client has disconnected');
   });
 });
+
+// room io객체가 연결되었을때, room에 대한 이벤트만 실행된다.
+room.on("connection", (socket) => {
+  console.log("room 네임스페이스에 접속");
+  socket.on("disconnect", () => {
+    console.log("room 네임스페이스 접속 해제");
+  });
+});
+
+// chat io객체가 연결되었을 때, chat에 대한 이벤트만 실행된다.
+// chat.on("connection", (socket) => {
+//   console.log("chat 네임스페이스에 접속");
+//   // "방번호"는 예시를 위한 임의의 값
+//   socket.join(방번호);
+//   socket.to(방번호).emit("join", {
+//     user: "system",
+//     chat: `${아이디}님이 입장하셨습니다.`,
+//   });
+
+//   socket.on("disconnect", () => {
+//     console.log("chat 네임스페이스 접속 해제");
+//     // 방에서 나가는 메서드
+//     socket.leave(roomId);
+//   });
+// });
 // io.on('connection', function(socket) {
 //     // 접속한 클라이언트의 정보가 수신되면
 //     socket.on('login', function(data) {
