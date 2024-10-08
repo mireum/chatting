@@ -16,11 +16,10 @@ const io = require('socket.io')(http, {cors: {
 // 네임스페이스 이벤트. room, chat이라는 io 객체를 만든다.
 // 서로 독립적인 공간이므로 io는 실행되지 않는다.
 const room = io.of("/room");
-const chat = io.of("/chat");
 
 // 클라이언트와 연결되면 실행되는 이벤트
 io.on('connection', (socket) => {
-  console.log('A client has connected');
+  console.log('A client has connected. id: ', socket.id);
   
   // 클라이언트가 message라는 이벤트를 발생시키면 해당 메시지를 수신한다.
   socket.on('message', (message) => {
