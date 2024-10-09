@@ -7,7 +7,7 @@ const mysql = require('mysql2')
 
 const app = express();
 const http = require('http').createServer(app);
-// http server를 socket.id server로 업그레이드
+
 const io = require('socket.io')(http, {cors: {
   origin: "*"
   }
@@ -15,21 +15,6 @@ const io = require('socket.io')(http, {cors: {
 // 네임스페이스 이벤트. room, chat이라는 io 객체를 만든다.
 // 서로 독립적인 공간이므로 io는 실행되지 않는다.
 const room = io.of("/room");
-
-// 클라이언트와 연결되면 실행되는 이벤트
-// io.on('connection', (socket) => {
-//   console.log('A client has connected. id: ', socket.id);
-  
-//   // 클라이언트가 message라는 이벤트를 발생시키면 해당 메시지를 수신한다.
-  // socket.on('message', (message) => {
-  //   console.log(`Received message: ${message}`);
-  //   socket.emit('message', message);
-  // });
-
-//   socket.on('disconnect', () => {
-//     console.log('A client has disconnected');
-//   });
-// });
 
 // room io객체가 연결되었을때, room에 대한 이벤트만 실행된다.
 room.on("connection", (socket) => {
@@ -51,7 +36,7 @@ room.on("connection", (socket) => {
 dotenv.config();
 
 // mysql 연결
-var conn = mysql.createConnection({ 
+const conn = mysql.createConnection({ 
   host : 'localhost',  
   user : 'root',
   password : process.env.MYSQLPASS,

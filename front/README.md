@@ -2,6 +2,9 @@
 
 ## socket 공부
 
+// io는 io.connect()의 단축형이다.
+// const socket = io('http://localhost:8000');
+
 socket.join(["room 237", "room 238"]); // 동시에 여러방에 참가
 
 <!-- // others 라는방에 이벤트를 보낼 수 있다. -->
