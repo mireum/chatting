@@ -16,16 +16,42 @@ const io = require('socket.io')(http, {cors: {
 // 서로 독립적인 공간이므로 io는 실행되지 않는다.
 const room = io.of("/room");
 
+let roomMessages = {}; // 방별 메시지 목록 관리
+let roomStacks = {}; // 방별 메시지 스택 관리
+
 // room io객체가 연결되었을때, room에 대한 이벤트만 실행된다.
 room.on("connection", (socket) => {
   console.log("room 네임스페이스에 접속");
+  
+  socket.on('joinRoom', (roomName) => {
+    socket.join(roomName);
+    if (!roomMessages[roomName]) {
+      roomMessages[roomName] = [];
+    }
+    if (!roomStacks[roomName]) {
+      roomStacks[roomName] = 0;
+    }
+    console.log(`Client joined room: ${roomName}`);
+  });
 
   // message 이벤트
-  socket.on('message', (message) => {
-    console.log(`Received message: ${message}`);
-    // socket은 그 사람에게만 간다.
-    // socket.emit('message', message);
-    room.emit('message', message);
+  socket.on('message', (data) => {
+    const { room, message, stack } = data;
+    console.log(`Received message for room ${room}: ${message}, Stack: ${stack}`);
+
+    if (!roomMessages[room]) {
+      roomMessages[room] = [];
+    }
+    // 방별로 스택 비교
+    if (stack !== roomMessages[room].length) {
+      console.log('Stack mismatch. Sending update to client.');
+      // 클라이언트의 스택이 다르면 업데이트 요청
+      socket.emit('updateMessages', { room: room, newMessages: roomMessages[room] });
+    } else {
+      // 메시지를 저장하고 해당 방의 모든 클라이언트에게 브로드캐스트
+      roomMessages[room].push(message);
+      socket.to(room).emit('message', { message, room, stack: roomMessages[room].length });
+    }
   });
 
   socket.on("disconnect", () => {
