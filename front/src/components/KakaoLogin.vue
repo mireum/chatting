@@ -8,7 +8,7 @@
     </a>
     <div v-else>
       <p>nickname: {{ user.name }}</p>
-      <!-- <p>email: {{ user.email }}</p> -->
+      <img :src="user.profile_image" />
       <button type="button" @click="kakaoLogout">카카오 로그아웃</button>
     </div>
   </div>
@@ -26,42 +26,29 @@ const getKakaoToken = async (code) => {
       code: code,
     };
 
-    const queryString = Object.keys(data)
-      .map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(data[k]))
-      .join("&");
-    //console.log(queryString);
-
-    const result = await axios.post(
-      "https://kauth.kakao.com/oauth/token",
-      queryString,
+    const queryString = Object.keys(data).map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(data[k])).join("&");
+    const result = await axios.post("https://kauth.kakao.com/oauth/token", queryString,
       {
         headers: {
           "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
         },
       }
     );
-    console.log(result);
     return result;
-  } catch (e) {
-    console.log(e);
-    return e;
+  } catch (err) {
+    console.log(err);
+    return err;
   }
 };
 
 const getKakaoUserInfo = async () => {
-  let data = "";
-  await window.Kakao.API.request({
-    url: "/v2/user/me",
-  })
-    .then(function (response) {
-      console.log(response);
-      data = response;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  console.log("카카오 계정 정보", data);
-  return data;
+  try {
+    const data = await window.Kakao.API.request({url: "/v2/user/me"})
+    console.log("카카오 계정 정보", data);
+    return data;
+  } catch (err) {
+    console.error(err);  
+  }
 };
 
 export default {
@@ -75,13 +62,11 @@ export default {
     // code가 있는 경우 토큰 발급 요청
     if (urlParams.has("code")) {
       const code = urlParams.get("code");
-      console.log("code: ", code);
       this.setKakaoToken(code);
     }
   },
   methods: {
     // 1. 인가 코드 얻기
-    // https://developers.kakao.com/docs/latest/ko/kakaologin/js#login
     kakaoLogin() {
       window.Kakao.Auth.authorize({
         redirectUri: "http://localhost:8080/",
@@ -89,27 +74,23 @@ export default {
     },
 
     // 2. 토큰 조회
-    // https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api#request-token
     async setKakaoToken(code) {
       const { data } = await getKakaoToken(code);
       if (data.error) {
         console.log(data.error);
         return;
       }
-      console.log(data);
       window.Kakao.Auth.setAccessToken(data.access_token);
       await this.setUserInfo();
     },
 
     // 3. 사용자 정보 조회
-    // https://developers.kakao.com/docs/latest/ko/kakaologin/js#req-user-info
     async setUserInfo() {
       const res = await getKakaoUserInfo();
       const userInfo = {
         name: res.kakao_account.profile.nickname,
-        email: res.kakao_account.email,
+        profile_image: res.kakao_account.profile.profile_image_url,
       };
-      console.log(userInfo);
       this.user = userInfo;
     },
 
