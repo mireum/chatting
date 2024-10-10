@@ -44,6 +44,10 @@
   const sendMessage = () => {
     if (Text.value.trim() !== '') {
       messages.value[currentRoom.value].push(Text.value);
+      console.log(messages.value);
+      console.log(messageStacks.value);
+      
+      
       roomsocket.emit('message', {
         message: Text.value,
         room: currentRoom.value,
@@ -77,6 +81,8 @@
     console.log(`Updating messages for room: ${room}`);
     messages.value[room] = newMessages;
     messageStacks.value[room] = newMessages.length; // 스택 맞춤
+    messages.value[currentRoom.value].push(Text.value);
+    Text.value = '';
   });
 </script> 
 

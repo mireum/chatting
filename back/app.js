@@ -42,11 +42,15 @@ room.on("connection", (socket) => {
     if (!roomMessages[room]) {
       roomMessages[room] = [];
     }
-    // 방별로 스택 비교
-    if (stack !== roomMessages[room].length) {
+
+    const currentStack = roomMessages[room].length;
+
+    if (stack !== currentStack) {
       console.log('Stack mismatch. Sending update to client.');
       // 클라이언트의 스택이 다르면 업데이트 요청
-      socket.emit('updateMessages', { room: room, newMessages: roomMessages[room] });
+      const difference = currentStack - stack;
+      const newMessages = roomMessages[room].slice(stack);
+      socket.emit('updateMessages', { room: room, newMessages: newMessages });
     } else {
       // 메시지를 저장하고 해당 방의 모든 클라이언트에게 브로드캐스트
       roomMessages[room].push(message);
