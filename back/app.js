@@ -31,7 +31,7 @@ room.on("connection", (socket) => {
     if (!roomStacks[roomName]) {
       roomStacks[roomName] = 0;
     }
-    console.log(`Client joined room: ${roomName}`);
+    console.log(`Client joined room: ${roomName}, id: ${socket.id}`);
   });
 
   // message 이벤트

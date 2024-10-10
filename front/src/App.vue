@@ -2,7 +2,12 @@
   <img alt="Vue logo" src="./assets/logo.png">
   <input v-model="Text" />
   <button @click="sendMessage">Send a message</button>
-  <KakaoLogin />
+  <KakaoLogin @loginSuccess="handleKakaoLogin" />
+  <div>
+    <img v-if="user" :src="user.profile_image" :style="{ width: '30px', height: 'auto', borderRadius: '50%' }"/>
+    <p v-if="user">{{ user.name }}</p>
+    <button v-if="user" @click="goChatting">채팅하기</button>
+  </div>
   <div>
     <h3>Messages in {{ currentRoom }}:</h3>
     <ul>
@@ -23,6 +28,8 @@
   const messages = ref([]);
   const messageStacks = ref({});
   const currentRoom = ref('general');   // 현재 방
+  // 임시
+  const chattingPartner = ref(null);
 
   // 방에 입장하는 함수
   const joinRoom = (room) => {
@@ -38,7 +45,7 @@
 
   // 컴포넌트가 마운트될 때 기본 방에 입장
   onMounted(() => {
-    joinRoom('general');
+    // joinRoom('general');
   });
 
   // 서버로 메시지를 보내는 함수
@@ -59,7 +66,15 @@
       Text.value = '';
       messageStacks.value[currentRoom.value] += 1;
     }
+  };
+
+  // 임시
+  const goChatting = () => {
+    if (chattingPartner.value) {
+    const roomName = `chat_${chattingPartner.value.name}_${this.user.name}`;
+    joinRoom(roomName); 
   }
+  };
   
   roomsocket.on('connect', () => {
     console.log('Connected to server');
@@ -95,9 +110,14 @@
     },
     data() {
       return {
-        
+        user: null,
       }
-    }
+    },
+    methods: {
+      handleKakaoLogin(user) {
+        this.user = user;
+      }
+    },
   }
 </script>
 

@@ -7,8 +7,7 @@
       />
     </a>
     <div v-else>
-      <p>nickname: {{ user.name }}</p>
-      <img :src="user.profile_image" />
+      <p>nickname: {{ user.name }} 님</p>
       <button type="button" @click="kakaoLogout">카카오 로그아웃</button>
     </div>
   </div>
@@ -92,6 +91,8 @@ export default {
         profile_image: res.kakao_account.profile.profile_image_url,
       };
       this.user = userInfo;
+      // 상위 컴포넌트에 user 전달
+      this.$emit('loginSuccess', this.user);
     },
 
     // 로그아웃
