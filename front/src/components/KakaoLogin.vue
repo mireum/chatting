@@ -22,7 +22,7 @@ const getKakaoToken = async (code) => {
     const data = {
       grant_type: "authorization_code",
       client_id: "dbe0b0cf6f38d1793f0cd63f8b62c875", // REST API 키
-      redirect_uri: "http://localhost:8080/kakaologin",
+      redirect_uri: "http://localhost:8080/",
       code: code,
     };
 
@@ -84,7 +84,7 @@ export default {
     // https://developers.kakao.com/docs/latest/ko/kakaologin/js#login
     kakaoLogin() {
       window.Kakao.Auth.authorize({
-        redirectUri: "http://localhost:8080/kakaologin",
+        redirectUri: "http://localhost:8080/",
       });
     },
 
@@ -98,6 +98,19 @@ export default {
       }
       console.log(data);
       window.Kakao.Auth.setAccessToken(data.access_token);
+      await this.setUserInfo();
+    },
+
+    // 3. 사용자 정보 조회
+    // https://developers.kakao.com/docs/latest/ko/kakaologin/js#req-user-info
+    async setUserInfo() {
+      const res = await getKakaoUserInfo();
+      const userInfo = {
+        name: res.kakao_account.profile.nickname,
+        email: res.kakao_account.email,
+      };
+      console.log(userInfo);
+      this.user = userInfo;
     },
 
     // 로그아웃
