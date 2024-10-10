@@ -2,7 +2,7 @@
   <img alt="Vue logo" src="./assets/logo.png">
   <input v-model="Text" />
   <button @click="sendMessage">Send a message</button>
-
+  <KakaoLogin />
   <div>
     <h3>Messages in {{ currentRoom }}:</h3>
     <ul>
@@ -15,6 +15,7 @@
 <script setup>
   import { io } from 'socket.io-client';
   import { onMounted, ref } from 'vue';
+  import KakaoLogin from './components/KakaoLogin.vue';
 
   const roomsocket = io('http://localhost:8000/room');
 
@@ -90,7 +91,7 @@
   export default {
     name: 'App',
     components: {
-      
+      KakaoLogin,
     },
     data() {
       return {

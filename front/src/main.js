@@ -13,3 +13,6 @@ app.use(createPinia())
 app.config.globalProperties.axios = axios;
 // app.use(socket, 'http://localhost:8000')
 app.mount('#app')
+
+// 카카오 로그인
+window.Kakao.init('f82ad1f1417a20a26c13e2fa96349374');
