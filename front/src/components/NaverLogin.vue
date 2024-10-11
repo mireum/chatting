@@ -28,12 +28,12 @@ export default{
 
     this.naverLogin.getLoginStatus((status) =>{
       if(status){
-        console.log(status);
+        console.log('status', status);
         console.log(this.naverLogin.user);
-        this.naverLogin.reprompt();
+        // this.naverLogin.reprompt();
         return;
       }else{
-          console.log("callback 처리에 실패했습니다.")
+        console.log("callback 처리에 실패했습니다.")
       }
     })
   },
