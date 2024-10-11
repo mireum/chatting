@@ -149,3 +149,18 @@ io.on('connection', function(socket) {
       console.log('user disconnected: ' + socket.name);
     });
 });
+
+devServer: {
+    proxy: {
+      "/oauth2.0": {
+        target: "https://nid.naver.com/",
+        changeOrigin: true,
+        logLevel: "debug",
+      },
+      "/v1": {
+        target: "https://openapi.naver.com/",
+        changeOrigin: true,
+        logLevel: "debug",
+      },
+    },
+  }
