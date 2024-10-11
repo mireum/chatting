@@ -23,6 +23,7 @@
   import { io } from 'socket.io-client';
   import { onMounted, ref } from 'vue';
   import KakaoLogin from './components/KakaoLogin.vue';
+  import axios from 'axios';
 
   const roomsocket = io('http://localhost:8000/room');
 
@@ -32,6 +33,16 @@
   const currentRoom = ref('general');   // 현재 방
   // 임시
   const chattingPartner = ref(null);
+
+  const getUserList = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8000/userList`);
+      console.log('resres', res);
+      
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   // 방에 입장하는 함수
   const joinRoom = (room) => {
@@ -48,6 +59,7 @@
   // 컴포넌트가 마운트될 때 기본 방에 입장
   onMounted(() => {
     // joinRoom('general');
+    getUserList();
   });
 
   // 서버로 메시지를 보내는 함수

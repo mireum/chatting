@@ -19,7 +19,12 @@ router.post('/userInfo', (req, res) => {
     flag: true,
     message: 'userData saved!'
   });
-  
+});
+
+router.get('/userList', (req, res) => {
+  res.json({
+    userList: userData,
+  })
 });
 
 module.exports = router;
