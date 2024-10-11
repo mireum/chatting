@@ -43,7 +43,6 @@ const getKakaoToken = async (code) => {
 const getKakaoUserInfo = async () => {
   try {
     const data = await window.Kakao.API.request({url: "/v2/user/me"})
-    console.log("카카오 계정 정보", data);
     return data;
   } catch (err) {
     console.error(err);  
@@ -86,13 +85,22 @@ export default {
     // 3. 사용자 정보 조회
     async setUserInfo() {
       const res = await getKakaoUserInfo();
+      console.log("카카오 계정 정보", res);
       const userInfo = {
+        id: res.id,
         name: res.kakao_account.profile.nickname,
         profile_image: res.kakao_account.profile.profile_image_url,
       };
       this.user = userInfo;
       // 상위 컴포넌트에 user 전달
       this.$emit('loginSuccess', this.user);
+      // 서버에 유저 정보 전달
+      try {
+        const result = await axios.post('http://localhost:8000/userInfo', userInfo)
+        console.log(result);
+      } catch (err) {
+        console.error(err);
+      }
     },
 
     // 로그아웃

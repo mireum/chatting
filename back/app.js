@@ -115,7 +115,6 @@ app.use((req, res, next) => {
 // 라우터를 미들웨어로 등록
 app.use('/', mainRouter);
 
-
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
   error.status = 404;

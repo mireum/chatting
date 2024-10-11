@@ -4,8 +4,10 @@
   <button @click="sendMessage">Send a message</button>
   <KakaoLogin @loginSuccess="handleKakaoLogin" />
   <div>
+    <!-- 그냥 개인정보 -->
     <img v-if="user" :src="user.profile_image" :style="{ width: '30px', height: 'auto', borderRadius: '50%' }"/>
     <p v-if="user">{{ user.name }}</p>
+    <!-- 이건 채팅쪽 -->
     <button v-if="user" @click="goChatting">채팅하기</button>
   </div>
   <div>
