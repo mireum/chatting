@@ -30,7 +30,8 @@ export default{
       if(status){
         console.log('status', status);
         console.log(this.naverLogin.user);
-        // this.naverLogin.reprompt();
+        console.log(this.naverLogin.user.t);
+        
         return;
       }else{
         console.log("callback 처리에 실패했습니다.")
