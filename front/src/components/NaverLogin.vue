@@ -31,9 +31,9 @@ export default{
         // console.log(this.naverLogin.user);
 
         const userInfo = {
-          id: this.naverLogin.user.id(),
-          name: this.naverLogin.user.nickname(),
-          profile_image: this.naverLogin.user.profile_image()
+          id: this.naverLogin.user.id,
+          name: this.naverLogin.user.nickname,
+          profile_image: this.naverLogin.user.profile_image
         };
         // 서버에 유저 정보 전달
         try {
@@ -53,6 +53,8 @@ export default{
       axios.get(url).then((res) => {
         console.log(res.data)
       });
+      // com.naver.nid.access_token
+      // com.naver.nid.oauth.state_token
     }
   }
 
