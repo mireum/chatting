@@ -18,7 +18,7 @@ export default{
     this.naverLogin = new window.naver.LoginWithNaverId({
       clientId: "dV_7BO34dzC4GTolRjVY",
       callbackUrl: "http://localhost:8080/",
-      isPopup: false, // 팝업을 통한 연동처리 여부
+      isPopup: false,
       loginButton: {
         color: "green", type: 3, height: 60},  // 로그인 버튼의 타입을 지정 
     });
@@ -26,15 +26,23 @@ export default{
     // 설정 정보를 초기화하고 연동을 준비
     this.naverLogin.init();
 
-    this.naverLogin.getLoginStatus((status) =>{
+    this.naverLogin.getLoginStatus(async (status) =>{
       if(status){
-        console.log('status', status);
-        console.log(this.naverLogin.user);
-        console.log(this.naverLogin.user.t);
-        
+        // console.log(this.naverLogin.user);
+
+        const userInfo = {
+          id: this.naverLogin.user.id(),
+          name: this.naverLogin.user.nickname(),
+          profile_image: this.naverLogin.user.profile_image()
+        };
+        // 서버에 유저 정보 전달
+        try {
+          const result = await axios.post('http://localhost:8000/userInfo', userInfo)
+          console.log(result);
+        } catch (err) {
+          console.error(err);
+        }
         return;
-      }else{
-        console.log("callback 처리에 실패했습니다.")
       }
     })
   },
