@@ -2,8 +2,7 @@
   <div>
     <a v-if="user.name == undefined" @click="kakaoLogin">
       <img
-        src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg"
-        width="222"
+        src="../assets/kakao_login_small.png"
       />
     </a>
     <div v-else>
