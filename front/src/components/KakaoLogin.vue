@@ -110,6 +110,7 @@ export default {
         .then(function (response) {
           console.log(window.Kakao.Auth.getAccessToken()); // null
           console.log(response);
+          window.location.replace("/");
         })
         .catch(function (error) {
           console.log(error);

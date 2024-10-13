@@ -1,9 +1,7 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
+  <HeaderComp></HeaderComp>
   <input v-model="Text" />
   <button @click="sendMessage">Send a message</button>
-  <KakaoLogin @loginSuccess="handleKakaoLogin" />
-  <NaverLogin />
   <div>
     <!-- 그냥 개인정보 -->
     <img v-if="user" :src="user.profile_image" :style="{ width: '30px', height: 'auto', borderRadius: '50%' }"/>
@@ -23,9 +21,8 @@
 <script setup>
   import { io } from 'socket.io-client';
   import { onMounted, ref } from 'vue';
-  import KakaoLogin from './components/KakaoLogin.vue';
   import axios from 'axios';
-  import NaverLogin from './components/NaverLogin.vue';
+  import HeaderComp from './components/HeaderComp.vue';
 
   const roomsocket = io('http://localhost:8000/room');
 
@@ -122,7 +119,7 @@
   export default {
     name: 'App',
     components: {
-      KakaoLogin,
+      
     },
     data() {
       return {
