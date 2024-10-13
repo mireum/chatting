@@ -3,7 +3,7 @@
     <div v-if="user==null" id="naverIdLogin"></div>
     <div v-else class="inLoginBox">
       <p><strong>{{ user.name }}</strong> 님</p>
-      <button class="logoutBox" type="button" @click="logout">
+      <button class="logoutBox btn" type="button" @click="logout">
         <img src="../assets/naver_logout.png" />
       </button>
     </div>
@@ -41,10 +41,11 @@ export default{
           name: this.naverLogin.user.nickname,
           profile_image: this.naverLogin.user.profile_image
         };
+        this.user = userInfo;
+        this.$emit('loginSuccess', this.user);
         // 서버에 유저 정보 전달
         try {
           const result = await axios.post('http://localhost:8000/userInfo', userInfo)
-          this.user = userInfo;
           console.log(result);
         } catch (err) {
           console.error(err);
@@ -70,6 +71,9 @@ export default{
 </script>
 
 <style>
+.btn {
+  cursor: pointer;
+}
 .inLoginBox {
   width: 180px;
   display: flex;
@@ -84,6 +88,5 @@ export default{
 }
 .logoutBox img {
   height: 30px;
-  cursor: pointer;
 }
 </style>

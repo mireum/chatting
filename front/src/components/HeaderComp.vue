@@ -4,8 +4,8 @@
       <img alt="Vue logo" src="../assets/logo.png" />
     </div>
     <div class="loginBox">
-      <KakaoLogin @loginSuccess="handleKakaoLogin" />
-      <NaverLogin />
+      <KakaoLogin v-if="!user || whichLogin == 'kakao'" @loginSuccess="handleKakaoLogin" />
+      <NaverLogin v-if="!user || whichLogin == 'naver'" @loginSuccess="handleNaverLogin" />
     </div>
   </header>
 </template>
@@ -18,6 +18,7 @@ export default {
   data() {
     return {
       user: null,
+      whichLogin: '',
     }
   },
   components: {
@@ -26,6 +27,11 @@ export default {
   methods: {
     handleKakaoLogin(user) {
       this.user = user;
+      this.whichLogin = 'kakao'
+    },
+    handleNaverLogin(user) {
+      this.user = user;
+      this.whichLogin = 'naver'
     }
   }
 }
