@@ -1,7 +1,9 @@
 <template>
   <div>
-    <div id="naverIdLogin"></div>
-    <button type="button" @click="logout">로그아웃</button>
+    <div v-if="user==null" id="naverIdLogin"></div>
+    <button v-else class="logoutBox" type="button" @click="logout">
+      <img src="../assets/naver_logout.png" />
+    </button>
   </div>
 </template>
 
@@ -11,7 +13,8 @@ import axios from 'axios';
 export default{
   data() {
     return {
-      naverLogin: null
+      naverLogin: null,
+      user: null
     };
   },
   mounted() {
@@ -20,7 +23,7 @@ export default{
       callbackUrl: "http://localhost:8080/",
       isPopup: false,
       loginButton: {
-        color: "green", type: 3, height: 60},  // 로그인 버튼의 타입을 지정 
+        color: "green", type: 2, height: 30},  // 로그인 버튼의 타입을 지정 
     });
 
     // 설정 정보를 초기화하고 연동을 준비
@@ -38,6 +41,7 @@ export default{
         // 서버에 유저 정보 전달
         try {
           const result = await axios.post('http://localhost:8000/userInfo', userInfo)
+          this.user = userInfo;
           console.log(result);
         } catch (err) {
           console.error(err);
@@ -61,3 +65,12 @@ export default{
 
 }
 </script>
+
+<style>
+.logoutBox {
+  height: 30px;
+}
+.logoutBox img {
+  height: 30px;
+}
+</style>
