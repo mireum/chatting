@@ -1,13 +1,11 @@
 <template>
   <div>
     <a v-if="user.name == undefined" @click="kakaoLogin">
-      <img
-        src="../assets/kakao_login_small.png"
-      />
+      <img src="../assets/kakao_login_small.png" />
     </a>
-    <div v-else>
-      <p>nickname: {{ user.name }} 님</p>
-      <button type="button" @click="kakaoLogout">카카오 로그아웃</button>
+    <div v-else class="inLoginBox">
+      <p><strong>{{ user.name }}</strong> 님</p>
+      <button class="logoutBtn" type="button" @click="kakaoLogout">로그아웃</button>
     </div>
   </div>
 </template>
@@ -118,3 +116,21 @@ export default {
   },
 };
 </script>
+
+<style>
+.inLoginBox {
+  width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 50px;
+}
+.logoutBtn {
+  width: 90px;
+  height: 30px;
+  border: none;
+  border-radius: 12px;
+  background-color: #FEE500;
+  font-weight: bold;
+}
+</style>

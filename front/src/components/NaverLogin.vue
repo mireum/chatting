@@ -1,9 +1,12 @@
 <template>
   <div>
     <div v-if="user==null" id="naverIdLogin"></div>
-    <button v-else class="logoutBox" type="button" @click="logout">
-      <img src="../assets/naver_logout.png" />
-    </button>
+    <div v-else class="inLoginBox">
+      <p><strong>{{ user.name }}</strong> 님</p>
+      <button class="logoutBox" type="button" @click="logout">
+        <img src="../assets/naver_logout.png" />
+      </button>
+    </div>
   </div>
 </template>
 
@@ -67,10 +70,20 @@ export default{
 </script>
 
 <style>
+.inLoginBox {
+  width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 50px;
+}
 .logoutBox {
   height: 30px;
+  border: none;
+  background-color: #fff;
 }
 .logoutBox img {
   height: 30px;
+  cursor: pointer;
 }
 </style>
