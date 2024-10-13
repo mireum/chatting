@@ -53,8 +53,9 @@ export default{
       axios.get(url).then((res) => {
         console.log(res.data)
       });
-      // com.naver.nid.access_token
-      // com.naver.nid.oauth.state_token
+      window.localStorage.removeItem('com.naver.nid.access_token');
+      window.localStorage.removeItem('com.naver.nid.oauth.state_token');
+      window.location.replace("/")
     }
   }
 
