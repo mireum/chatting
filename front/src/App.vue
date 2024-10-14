@@ -2,23 +2,25 @@
   <HeaderComp @isLogin="handleUser"></HeaderComp>
   <div class="container">
 
-    <div v-if="!user">
-      <h2><strong>로그인</strong> 후 이용해주세요!</h2>
+    <!-- <div v-if="!user"> -->
+    <div>
+      <h2 class="announceH2">로그인 후 이용해주세요!</h2>
     </div>
-    <div v-else>
+    <!-- <div v-else> -->
+    <div>
       <input v-model="Text" />
       <button @click="sendMessage">Send a message</button>
       <div>
-        <!-- 그냥 개인정보 -->
         <img v-if="user" :src="user.profile_image" :style="{ width: '30px', height: 'auto', borderRadius: '50%' }"/>
         <p v-if="user">{{ user.name }}</p>
-        <!-- 이건 채팅쪽 -->
         <button v-if="user" @click="goChatting">채팅하기</button>
       </div>
-      <div>
-        <h3>Messages in {{ currentRoom }}:</h3>
+      <div v-if="user">
+        <!-- <h3>Messages in {{ currentRoom }}:</h3> -->
+        <div>Chats</div>
         <ul>
-          <li v-for="(message, index) in messages[currentRoom]" :key="index">{{ message }}</li>
+          <!-- <li v-for="(message, index) in messages[currentRoom]" :key="index">{{ message }}</li> -->
+          <UserList :user="user" />
         </ul>
       </div>
       
@@ -32,6 +34,7 @@
   import { onMounted, ref } from 'vue';
   import axios from 'axios';
   import HeaderComp from './components/HeaderComp.vue';
+import UserList from './components/UserList.vue';
 
   const roomsocket = io('http://localhost:8000/room');
 
@@ -147,5 +150,9 @@
 .container {
   width: 1200px;
   margin: 0 auto;
+}
+.announceH2 {
+  text-align: center;
+  padding: 280px 0px;
 }
 </style>
