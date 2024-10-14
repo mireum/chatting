@@ -1,19 +1,28 @@
 <template>
-  <HeaderComp></HeaderComp>
-  <input v-model="Text" />
-  <button @click="sendMessage">Send a message</button>
-  <div>
-    <!-- 그냥 개인정보 -->
-    <img v-if="user" :src="user.profile_image" :style="{ width: '30px', height: 'auto', borderRadius: '50%' }"/>
-    <p v-if="user">{{ user.name }}</p>
-    <!-- 이건 채팅쪽 -->
-    <button v-if="user" @click="goChatting">채팅하기</button>
-  </div>
-  <div>
-    <h3>Messages in {{ currentRoom }}:</h3>
-    <ul>
-      <li v-for="(message, index) in messages[currentRoom]" :key="index">{{ message }}</li>
-    </ul>
+  <HeaderComp @isLogin="handleUser"></HeaderComp>
+  <div class="container">
+
+    <div v-if="!user">
+      <h2><strong>로그인</strong> 후 이용해주세요!</h2>
+    </div>
+    <div v-else>
+      <input v-model="Text" />
+      <button @click="sendMessage">Send a message</button>
+      <div>
+        <!-- 그냥 개인정보 -->
+        <img v-if="user" :src="user.profile_image" :style="{ width: '30px', height: 'auto', borderRadius: '50%' }"/>
+        <p v-if="user">{{ user.name }}</p>
+        <!-- 이건 채팅쪽 -->
+        <button v-if="user" @click="goChatting">채팅하기</button>
+      </div>
+      <div>
+        <h3>Messages in {{ currentRoom }}:</h3>
+        <ul>
+          <li v-for="(message, index) in messages[currentRoom]" :key="index">{{ message }}</li>
+        </ul>
+      </div>
+      
+    </div>
   </div>
 </template>
 
@@ -127,7 +136,7 @@
       }
     },
     methods: {
-      handleKakaoLogin(user) {
+      handleUser(user) {
         this.user = user;
       }
     },
@@ -135,5 +144,8 @@
 </script>
 
 <style>
-
+.container {
+  width: 1200px;
+  margin: 0 auto;
+}
 </style>

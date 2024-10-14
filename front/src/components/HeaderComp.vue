@@ -27,11 +27,13 @@ export default {
   methods: {
     handleKakaoLogin(user) {
       this.user = user;
-      this.whichLogin = 'kakao'
+      this.whichLogin = 'kakao';
+      this.$emit('isLogin', user);
     },
     handleNaverLogin(user) {
       this.user = user;
-      this.whichLogin = 'naver'
+      this.whichLogin = 'naver';
+      this.$emit('isLogin', user);
     }
   }
 }
@@ -44,6 +46,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 20px 20px;
 }
 .logoBox {
   width: 50px;
