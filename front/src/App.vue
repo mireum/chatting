@@ -30,8 +30,8 @@ const chatList = ref(null);
 const getUserList = async () => {
   try {
     const res = await axios.get(`http://localhost:8000/userList`);
-    console.log('리스폰스', res);
-    chatList.value = res;
+    console.log('리스폰스', res.data);
+    chatList.value = res.data;
     console.log('챗리스트', chatList);
     console.log('챗리스트밸류', chatList.value);
     console.log('유저', user);
@@ -42,13 +42,17 @@ const getUserList = async () => {
 };
 
 onMounted(() => {
-  getUserList();
+  // if (user.value) {
+  //   getUserList();
+  // }
 })
 
 const handleUser = (userInfo) => {
       user.value = userInfo;
+      getUserList();
     }
 </script>
+<!-- vue2 의 경우 script -->
 <!-- <script>
 import HeaderComp from './components/HeaderComp.vue';
 import UserList from './components/UserList.vue';
