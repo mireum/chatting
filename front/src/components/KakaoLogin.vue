@@ -82,7 +82,7 @@ export default {
     // 3. 사용자 정보 조회
     async setUserInfo() {
       const res = await getKakaoUserInfo();
-      console.log("카카오 계정 정보", res);
+      // console.log("카카오 계정 정보", res);
       const userInfo = {
         id: res.id,
         name: res.kakao_account.profile.nickname,
@@ -93,8 +93,7 @@ export default {
       this.$emit('loginSuccess', this.user);
       // 서버에 유저 정보 전달
       try {
-        const result = await axios.post('http://localhost:8000/userInfo', userInfo)
-        console.log(result);
+        await axios.post('http://localhost:8000/userInfo', userInfo)
       } catch (err) {
         console.error(err);
       }

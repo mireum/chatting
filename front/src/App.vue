@@ -7,10 +7,12 @@
     </div>
     <div v-else>
       <div v-if="user">
-        <div>Chats</div>
+        <div class="chatTitle">Chats</div>
+        <p class="chatP">접속 중인 사용자</p>
         <ul>
-          <!-- <li v-for="(message, index) in messages[currentRoom]" :key="index">{{ message }}</li> -->
-          <UserList :user="user" />
+          <li class="userLi" v-for="(user, index) in chatList" :key="index">
+            <UserList :user="user" />
+          </li>
         </ul>
       </div>
       
@@ -19,7 +21,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import HeaderComp from './components/HeaderComp.vue';
 import UserList from './components/UserList.vue';
 import axios from 'axios';
@@ -30,52 +32,19 @@ const chatList = ref(null);
 const getUserList = async () => {
   try {
     const res = await axios.get(`http://localhost:8000/userList`);
-    console.log('리스폰스', res.data);
-    chatList.value = res.data;
-    console.log('챗리스트', chatList);
-    console.log('챗리스트밸류', chatList.value);
-    console.log('유저', user);
-    
+    chatList.value = res.data.userList;
   } catch (err) {
     console.error(err);
   }
 };
 
-onMounted(() => {
-  // if (user.value) {
-  //   getUserList();
-  // }
-})
-
 const handleUser = (userInfo) => {
-      user.value = userInfo;
-      getUserList();
-    }
-</script>
-<!-- vue2 의 경우 script -->
-<!-- <script>
-import HeaderComp from './components/HeaderComp.vue';
-import UserList from './components/UserList.vue';
-
-export default {
-  name: 'App',
-  components: {
-    HeaderComp,
-    UserList,
-  },
-  data() {
-    return {
-      user: null,
-      chatList: null,
-    }
-  },
-  methods: {
-    handleUser(user) {
-      this.user = user;
-    }
-  },
+  // userInfo는 현재 사용자
+  user.value = userInfo;
+  // 이건 받아올 다른 사용자
+  getUserList();
 }
-</script> -->
+</script>
 
 <style>
 .container {
@@ -86,4 +55,22 @@ export default {
   text-align: center;
   padding: 280px 0px;
 }
+.chatTitle {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+}
+.chatP {
+  font-weight: bold;
+  text-align: center;
+  margin: 0px 0px 30px 0px;
+}
+.userLi {
+  list-style-type: none;
+  margin-bottom: 20px;
+}
+.userLi:last-child {
+  margin-bottom: 0;
+}
 </style>
+

@@ -164,3 +164,29 @@ devServer: {
       },
     },
   }
+
+
+<!-- vue2 의 경우 script -->
+<script>
+import HeaderComp from './components/HeaderComp.vue';
+import UserList from './components/UserList.vue';
+
+export default {
+  name: 'App',
+  components: {
+    HeaderComp,
+    UserList,
+  },
+  data() {
+    return {
+      user: null,
+      chatList: null,
+    }
+  },
+  methods: {
+    handleUser(user) {
+      this.user = user;
+    }
+  },
+}
+</script>
