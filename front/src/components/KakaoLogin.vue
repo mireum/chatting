@@ -104,7 +104,7 @@ export default {
       this.user = {};
       window.Kakao.Auth.logout()
         .then(function (response) {
-          console.log(window.Kakao.Auth.getAccessToken()); // null
+          // console.log(window.Kakao.Auth.getAccessToken()); // null
           console.log(response);
           window.location.replace("/");
         })

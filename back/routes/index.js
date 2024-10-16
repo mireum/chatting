@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 router.post('/userInfo', (req, res) => {
   const { id, name, profile_image } = req.body;
 
-  userData[id] = { name, profile_image };
+  userData[id] = { id, name, profile_image };
   console.log('userData', userData);
   res.json({
     flag: true,
