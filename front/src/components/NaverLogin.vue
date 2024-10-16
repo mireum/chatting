@@ -46,7 +46,7 @@ export default{
         // 서버에 유저 정보 전달
         try {
           const result = await axios.post('http://localhost:8000/userInfo', userInfo)
-          console.log(result);
+          if (!result.data) { console.log(result); }
         } catch (err) {
           console.error(err);
         }

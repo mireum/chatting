@@ -24,6 +24,7 @@ import { ref } from 'vue';
 import HeaderComp from './components/HeaderComp.vue';
 import UserList from './components/UserList.vue';
 import axios from 'axios';
+import { io } from 'socket.io-client';
 
 const user = ref(null);
 const chatList = ref(null);
@@ -45,6 +46,11 @@ const handleUser = (userInfo) => {
   user.value = userInfo;
   // 이건 받아올 다른 사용자
   getUserList();
+  // socket 연결
+  const socket = io('http://localhost:8000');
+  socket.on('connection', () => {
+    console.log('Socket connected: ', socket.id);
+  })
 }
 </script>
 
