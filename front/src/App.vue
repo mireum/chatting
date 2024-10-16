@@ -10,8 +10,8 @@
         <div class="chatTitle">Chats</div>
         <p class="chatP">접속 중인 사용자</p>
         <ul>
-          <li class="userLi" v-for="(user, index) in chatList" :key="index">
-            <UserList :user="user" />
+          <li class="userLi" v-for="(userCard, index) in chatList" :key="index">
+            <UserList :userCard="userCard" :user="user" />
           </li>
         </ul>
       </div>

@@ -23,7 +23,7 @@ let roomStacks = {}; // 방별 메시지 스택 관리
 room.on("connection", (socket) => {
   console.log("room 네임스페이스에 접속");
   
-  socket.on('joinRoom', (roomName) => {
+  socket.on('joinRoom', ({ roomId, otherUserId }) => {
     socket.join(roomName);
     if (!roomMessages[roomName]) {
       roomMessages[roomName] = [];
@@ -33,6 +33,18 @@ room.on("connection", (socket) => {
     }
     console.log(`Client joined room: ${roomName}, id: ${socket.id}`);
   });
+
+  // 원래 joinRoom
+  // socket.on('joinRoom', (roomName) => {
+  //   socket.join(roomName);
+  //   if (!roomMessages[roomName]) {
+  //     roomMessages[roomName] = [];
+  //   }
+  //   if (!roomStacks[roomName]) {
+  //     roomStacks[roomName] = 0;
+  //   }
+  //   console.log(`Client joined room: ${roomName}, id: ${socket.id}`);
+  // });
 
   // message 이벤트
   socket.on('message', (data) => {

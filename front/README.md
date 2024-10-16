@@ -190,3 +190,28 @@ export default {
   },
 }
 </script>
+
+<!-- userList.vue의 script -->
+<!-- <script>
+import io from 'socket.io-client';
+export default {
+  data() {
+    return {
+      socket: null,
+      roomId: 'room123'
+    }
+  },
+  methods: {
+    joinRoom(roomId, otherUserId) {
+      // 버튼 클릭 시 특정 방에 참가 요청을 보냄
+      this.socket.emit('joinRoom', {roomId, otherUserId});
+    }
+  },
+  props: {
+    user: {
+      type: Object,
+      required: true
+    }
+  }
+}
+</script> -->
