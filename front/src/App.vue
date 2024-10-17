@@ -15,6 +15,7 @@
           </li>
         </ul>
       </div>
+      <RouterView />
     </div>
   </div>
 </template>
@@ -25,6 +26,7 @@ import HeaderComp from './components/HeaderComp.vue';
 import UserList from './components/UserList.vue';
 import axios from 'axios';
 import { io } from 'socket.io-client';
+import { RouterView } from 'vue-router';
 
 const user = ref(null);
 const chatList = ref(null);
