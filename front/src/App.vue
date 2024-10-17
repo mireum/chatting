@@ -32,6 +32,7 @@ const chatList = ref(null);
 const getUserList = async () => {
   try {
     const res = await axios.get(`http://localhost:8000/userList`);
+    
     // 나는 빼고 chatList에 넣기
     const list = Object.values(res.data.userList)
     chatList.value = list.filter(u => u.id !== user.value.id);
@@ -47,9 +48,10 @@ const handleUser = (userInfo) => {
   // 이건 받아올 다른 사용자
   getUserList();
   // socket 연결
-  const socket = io('http://localhost:8000');
-  socket.on('connection', () => {
-    console.log('Socket connected: ', socket.id);
+  const socket = io('http://localhost:8000/');
+  socket.on('connect', () => {    
+    socket.emit('register', {userId: user.value.id });
+
   })
 }
 </script>

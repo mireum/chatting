@@ -19,9 +19,13 @@ const room = io.of("/room");
 let roomMessages = {}; // 방별 메시지 목록 관리
 let roomStacks = {}; // 방별 메시지 스택 관리
 
-// room io객체가 연결되었을때, room에 대한 이벤트만 실행된다.
 socket.on("connection", (socket) => {
   console.log("socketio 접속: ", socket.id);
+  socket.on('register', ({userId}) => {
+    userData[userId].socketId = socket.id;
+    console.log(userData); 
+
+  })
 })
   
 //   socket.on('joinRoom', ({ roomId, userId, userCardId }) => {
