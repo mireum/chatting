@@ -1,14 +1,7 @@
 const express = require('express');
 const { userData } = require('../app');
-// const app = express();
 const router = express.Router();
-// const http = require('http').createServer(app);
-// const io = require('socket.io')(http, {cors: {
-//   origin: "*"
-//   }
-// });
 
-// let userData = {};
 // // 네임스페이스 이벤트. room, chat이라는 io 객체를 만든다.
 // // 서로 독립적인 공간이므로 io는 실행되지 않는다.
 // const room = io.of("/room");
