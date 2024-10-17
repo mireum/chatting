@@ -19,8 +19,8 @@ const props = defineProps({
 const roomId = ref('room1');
 
 const joinRoom = (userId, userCardId) => {
-  const socket = io('http://localhost:8000/room');
-  socket.emit('joinRoom', { roomId:roomId.value, userId, userCardId:userCardId });
+  const room = io('http://localhost:8000/room');
+  room.emit('joinRoom', { roomId:roomId.value, userId, userCardId:userCardId });
 };
 </script>
 

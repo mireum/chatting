@@ -27,7 +27,15 @@ socket.on("connection", (socket) => {
 
   })
 })
+
+// room 네임스페이스
+room.on('connection', (socket) => {
+  socket.on('joinRoom', ({ roomId, userId, userCardId }) => {
+    console.log(roomId, userId, userCardId);
+    
+  });
   
+})
 //   socket.on('joinRoom', ({ roomId, userId, userCardId }) => {
 //     console.log(roomId, userId, userCardId);
     
