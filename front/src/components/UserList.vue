@@ -1,10 +1,10 @@
 <script setup>
-import {  ref, defineProps } from 'vue';
+import { defineProps } from 'vue';
 // ref
-import io from 'socket.io-client';
-import { useRouter } from 'vue-router';
+// import io from 'socket.io-client';
+// import { useRouter } from 'vue-router';
 
-const router = useRouter();
+// const router = useRouter();
 // const roomsocket = io('http://localhost:8000/room');
 
 const props = defineProps({
@@ -19,16 +19,16 @@ const props = defineProps({
 });
 
 // const socket = ref(null);
-const roomId = ref('room1');
-const joinRoom = (userId, userCardId) => {
-  router.push('/roomId')
-  const room = io('http://localhost:8000/room');
-  room.emit('joinRoom', { roomId:roomId.value });
-  room.emit('invite', { roomId:roomId.value, userCardId:userCardId })
-  room.on('message', (data) => {
-    console.log(data);
-  })
-};
+// const roomId = ref('room1');
+// const joinRoom = (userId, userCardId) => {
+//   router.push('/roomId')
+//   const room = io('http://localhost:8000/room');
+//   room.emit('joinRoom', { roomId:roomId.value });
+//   room.emit('invite', { roomId:roomId.value, userCardId:userCardId })
+//   room.on('message', (data) => {
+//     console.log(data);
+//   })
+// };
 </script>
 
 <template>
@@ -38,8 +38,8 @@ const joinRoom = (userId, userCardId) => {
       <p>{{ props.userCard.name }}</p>
     </div>
     <div class="chatBtnBox">
-      <button class="chatBtn" @click="joinRoom(props.user.id, props.userCard.id)">채팅하기</button>
-      <!-- <button class="chatBtn" @click="() => {$router.push('/roomId')}">채팅하기</button> -->
+      <!-- <button class="chatBtn" @click="joinRoom(props.user.id, props.userCard.id)">채팅하기</button> -->
+      <button class="chatBtn" @click="() => {$router.push('/roomId')}">채팅하기</button>
     </div>
   </div>
 </template>
