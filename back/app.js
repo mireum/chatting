@@ -24,7 +24,6 @@ let messageStacks = {}; // 방별 메시지 스택 관리
 //   socket.on('register', ({userId}) => {
 //     userData[userId].socketId = socket.id;
 //     // console.log(userData); 
-
 //   })
 // })
 

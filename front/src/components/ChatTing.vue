@@ -55,13 +55,13 @@
     
     const { message, room, stack } = data;
     console.log('1',message.value);
-    // console.log('2', message.value[room]);
+    console.log('2', message.value[room]);
     
-    // if (!messages.value[room]) {
-    //   messages.value[room] = [];
-    // }
-    // messages.value[room].push(message);
-    // messageStacks.value[room] = stack;  // 서버의 스택 번호로 업데이트
+    if (!messages.value[room]) {
+      messages.value[room] = [];
+    }
+    messages.value[room].push(message);
+    messageStacks.value[room] = stack;  // 서버의 스택 번호로 업데이트
     console.log(`Received room message, room, stack: ${message} ${room} ${stack}`);
   });
 
