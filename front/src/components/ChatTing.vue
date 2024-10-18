@@ -7,18 +7,18 @@
   const Text = ref('');
   const messages = ref([]);
   const messageStacks = ref({});
-  const currentRoom = ref('room1');   // 현재 방
+  const currentRoom = ref('');   // 현재 방
 
   // 방에 입장하는 함수
-  const joinRoom = (room) => {
-    currentRoom.value = room;
-    if (!messages.value[room]) {
-      messages.value[room] = [];
+  const joinRoom = (roomId) => {
+    currentRoom.value = roomId;
+    if (!messages.value[roomId]) {
+      messages.value[roomId] = [];
     }
-    if (!messageStacks.value[room]) {
-      messageStacks.value[room] = 0;
+    if (!messageStacks.value[roomId]) {
+      messageStacks.value[roomId] = 0;
     }
-    roomsocket.emit('joinRoom', room); // 서버에 방 입장 요청
+    roomsocket.emit('joinRoom', roomId); // 서버에 방 입장 요청
   };
 
   // 컴포넌트가 마운트될 때 기본 방에 입장
@@ -48,19 +48,23 @@
   
   roomsocket.on('connect', () => {
     console.log('Connected to server');
-    // 서버에 message라는 이벤트와 메시지를 보냄
-    // roomsocket.emit('message', 'Hi! i am client');
-  });
 
-  roomsocket.on('message', (data) => {
+  });
+  roomsocket.on('receive', (data) => {
+    console.log(data);
+    
     const { message, room, stack } = data;
-    if (!messages.value[room]) {
-      messages.value[room] = [];
-    }
-    messages.value[room].push(message);
-    messageStacks.value[room] = stack;  // 서버의 스택 번호로 업데이트
+    console.log('1',message.value);
+    // console.log('2', message.value[room]);
+    
+    // if (!messages.value[room]) {
+    //   messages.value[room] = [];
+    // }
+    // messages.value[room].push(message);
+    // messageStacks.value[room] = stack;  // 서버의 스택 번호로 업데이트
     console.log(`Received room message, room, stack: ${message} ${room} ${stack}`);
   });
+
 
   roomsocket.on('updateMessages', (data) => {
     const { room, newMessages } = data;

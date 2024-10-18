@@ -13,39 +13,49 @@ let userData = {};
 
 // 네임스페이스 이벤트. room, chat이라는 io 객체를 만든다.
 // 서로 독립적인 공간이므로 io는 실행되지 않는다.
-const socket = io.of('/');
+// const socket = io.of('/');
 const room = io.of("/room");
 
 let roomMessages = {}; // 방별 메시지 목록 관리
-let roomStacks = {}; // 방별 메시지 스택 관리
+let messageStacks = {}; // 방별 메시지 스택 관리
 
-socket.on("connection", (socket) => {
-  console.log("socketio 접속: ", socket.id);
-  socket.on('register', ({userId}) => {
-    userData[userId].socketId = socket.id;
-    console.log(userData); 
+// socket.on("connection", (socket) => {
+//   console.log("socketio 접속: ", socket.id);
+//   socket.on('register', ({userId}) => {
+//     userData[userId].socketId = socket.id;
+//     // console.log(userData); 
 
-  })
-})
+//   })
+// })
 
 // room 네임스페이스
 room.on('connection', (socket) => {
-  socket.on('joinRoom', ({ roomId }) => {    
+  socket.on('joinRoom', ( roomId ) => {   
     socket.join(roomId);
+    // 입장한 방에 스택이 없으면 초기화
+    if (!messageStacks[room]) {
+      messageStacks[room] = 0;
+    }
+    // 사용자가 속한 방 확인 { '아이디', '방' }
+    console.log(socket.rooms);
   });
 
-  socket.on('invite', ({ roomId, userCardId }) => {
-    console.log(roomId, userCardId);
-    const userCardSocketId = userData[userCardId].socketId;
-    io.to(userCardSocketId).emit('joinRoom', roomId);
+  // socket.on('invite', ({ roomId, userCardId }) => {
+  //   console.log(roomId, userCardId);
+  //   const userCardSocketId = userData[userCardId].socketId;
+  //   io.to(userCardSocketId).emit('joinRoom', roomId);
 
-    io.to(roomId).emit('message', () => {
-      text: 'room1입니다.'
-    });
-  });
+  //   io.to(roomId).emit('message', {text: 'room1입니다.'});
+  // });
 
+  socket.on('message', ({ message, room, stack }) => {
+    console.log(message, room, stack);
+    stack++;
 
+    socket.to(room).emit('receive', {message, room, stack});
+    console.log(`Message sent to room ${room}, message: ${message}, stack: ${stack}`);
 
+  })
 });
 
 dotenv.config();
