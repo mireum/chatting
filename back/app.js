@@ -21,15 +21,25 @@ let messageStacks = {}; // 방별 메시지 스택 관리
 room.on('connection', (socket) => {
   socket.on('joinRoom', ( roomId ) => {   
     socket.join(roomId);
-    // 입장한 방에 스택이 없으면 초기화
-    if (!messageStacks[room]) {
-      messageStacks[room] = 0;
-    }
+
     // 사용자가 속한 방 확인 { '아이디', '방' }
     console.log(socket.rooms);
-    rooms[roomId] = [];
+
+    // 방 이름 없으면 새 방 만들고
+    // 있으면 room 주기
+    if (!rooms[roomId]) {
+      rooms[roomId] = [];
+      room[roomId] = {
+        roomMessages: [],
+        roomStack: 0
+      }
+    }
+    else {
+      socket.emit('enterRoom', {
+        roomMessages:rooms[roomId].roomMessages, 
+        roomStack: rooms[roomId].roomStack })
+    }
     console.log('rooms', rooms);
-    
   });
 
   // socket.on('invite', ({ roomId, userCardId }) => {

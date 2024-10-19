@@ -10,6 +10,40 @@
 //   })
 // })
 
+const rooms = {};
+
+// 방을 생성하는 함수
+const createRoom = (roomId) => {
+  if (!rooms[roomId]) {
+    rooms[roomId] = {
+      roomMessages: [],  // 메시지 배열 (id: msg 형태로 저장)
+      roomStack: 0       // 방의 스택 (메시지 갯수 등으로 사용할 수 있음)
+    };
+  }
+};
+
+// 메시지를 추가하는 함수
+const addMessageToRoom = (roomId, messageId, message) => {
+  if (rooms[roomId]) {
+    rooms[roomId].roomMessages.push({ [messageId]: message });
+    rooms[roomId].roomStack += 1;
+  } else {
+    console.log(`Room ${roomId} does not exist!`);
+  }
+};
+
+// 방 생성 예시
+createRoom('room1');
+createRoom('room2');
+
+// 메시지 추가 예시
+addMessageToRoom('room1', 'user1', 'Hello, this is the first message');
+addMessageToRoom('room1', 'user2', 'Hello, this is the second message');
+addMessageToRoom('room2', 'user3', 'Welcome to room2!');
+
+// 결과 출력
+console.log(rooms);
+
 
 //   socket.on('joinRoom', ({ roomId, userId, userCardId }) => {
 //     console.log(roomId, userId, userCardId);
