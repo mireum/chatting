@@ -2,12 +2,6 @@
   import { io } from 'socket.io-client';
   import { onMounted, ref } from 'vue';
   import { useRoute } from 'vue-router';
-
-  // defineProps({
-  //   roomId: String
-  // })
-  // console.log('url:', roomId);
-  // console.log($route.params.roomId);
   
   const roomsocket = io('http://localhost:8000/room');
 
@@ -32,17 +26,8 @@
   // 컴포넌트가 마운트될 때 기본 방에 입장
   onMounted(() => {
     const roomId = route.params.roomId;
-    console.log(roomId);
-    
-    // const generateRoomName = () => {
-      
-      
-    //   return result;
-    // }
-    // const roomName = generateRoomName();
-    // 방이름
-    // joinRoom(roomName);
-    joinRoom('asdasd');
+    console.log('roomId: ', roomId);
+    joinRoom(roomId);
   });
 
   // 서버로 메시지를 보내는 함수

@@ -27,6 +27,9 @@ room.on('connection', (socket) => {
     }
     // 사용자가 속한 방 확인 { '아이디', '방' }
     console.log(socket.rooms);
+    rooms[roomId] = [];
+    console.log('rooms', rooms);
+    
   });
 
   // socket.on('invite', ({ roomId, userCardId }) => {
