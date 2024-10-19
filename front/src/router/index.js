@@ -12,6 +12,7 @@ const routes = [
     path: '/:roomId',
     name: 'roomId',
     component: ChatTing,
+    props: true
   },
 ];
 const router = createRouter({

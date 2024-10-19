@@ -1,3 +1,16 @@
+// 서로 독립적인 공간이므로 io는 실행되지 않는다.
+// const socket = io.of('/');
+// const room = io.of("/room");
+
+// socket.on("connection", (socket) => {
+//   console.log("socketio 접속: ", socket.id);
+//   socket.on('register', ({userId}) => {
+//     userData[userId].socketId = socket.id;
+//     // console.log(userData); 
+//   })
+// })
+
+
 //   socket.on('joinRoom', ({ roomId, userId, userCardId }) => {
 //     console.log(roomId, userId, userCardId);
      

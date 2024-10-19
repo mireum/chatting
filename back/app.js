@@ -10,22 +10,12 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http, {cors: { origin: "*" }});
 
 let userData = {};
+let rooms = {};
 
-// 네임스페이스 이벤트. room, chat이라는 io 객체를 만든다.
-// 서로 독립적인 공간이므로 io는 실행되지 않는다.
-// const socket = io.of('/');
 const room = io.of("/room");
 
 let roomMessages = {}; // 방별 메시지 목록 관리
 let messageStacks = {}; // 방별 메시지 스택 관리
-
-// socket.on("connection", (socket) => {
-//   console.log("socketio 접속: ", socket.id);
-//   socket.on('register', ({userId}) => {
-//     userData[userId].socketId = socket.id;
-//     // console.log(userData); 
-//   })
-// })
 
 // room 네임스페이스
 room.on('connection', (socket) => {

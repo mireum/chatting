@@ -29,6 +29,13 @@ const props = defineProps({
 //     console.log(data);
 //   })
 // };
+const generateRoomName = () => {
+  const user = String(props.user.id);
+  const userCard = String(props.userCard.id);
+  if (user >= userCard) return user+'/'+userCard;
+  else return userCard+'/'+user;
+};
+
 </script>
 
 <template>
@@ -39,7 +46,7 @@ const props = defineProps({
     </div>
     <div class="chatBtnBox">
       <!-- <button class="chatBtn" @click="joinRoom(props.user.id, props.userCard.id)">채팅하기</button> -->
-      <button class="chatBtn" @click="() => {$router.push('/roomId')}">채팅하기</button>
+      <button class="chatBtn" @click="() => {$router.push(`/${generateRoomName()}`)}">채팅하기</button>
     </div>
   </div>
 </template>

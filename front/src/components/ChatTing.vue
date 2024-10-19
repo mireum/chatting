@@ -23,18 +23,15 @@
 
   // 컴포넌트가 마운트될 때 기본 방에 입장
   onMounted(() => {
-    const generateRandomRoomName = (length) => {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      let result = '';
-      for (let i = 0; i < length; i++) {
-        const randomIndex = Math.floor(Math.random() * chars.length);
-        result += chars[randomIndex];
-      }
-      return result;
-    }
-    const roomName = generateRandomRoomName(8);
+    // const generateRoomName = () => {
+      
+      
+    //   return result;
+    // }
+    // const roomName = generateRoomName();
     // 방이름
-    joinRoom(roomName);
+    // joinRoom(roomName);
+    joinRoom('asdasd');
   });
 
   // 서버로 메시지를 보내는 함수
