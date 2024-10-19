@@ -1,9 +1,17 @@
 <script setup>
   import { io } from 'socket.io-client';
   import { onMounted, ref } from 'vue';
+  import { useRoute } from 'vue-router';
 
+  // defineProps({
+  //   roomId: String
+  // })
+  // console.log('url:', roomId);
+  // console.log($route.params.roomId);
+  
   const roomsocket = io('http://localhost:8000/room');
 
+  const route = useRoute();
   const Text = ref('');
   const messages = ref([]);
   const messageStacks = ref({});
@@ -23,6 +31,9 @@
 
   // 컴포넌트가 마운트될 때 기본 방에 입장
   onMounted(() => {
+    const roomId = route.params.roomId;
+    console.log(roomId);
+    
     // const generateRoomName = () => {
       
       
@@ -85,7 +96,7 @@
 </script> 
 
 <template>
-  <p>상대방이름</p>
+  <p>상대방이름 {{ roomName }}</p>
   <input v-model="Text" />
   <button @click="sendMessage">Send a message</button>
   <ul>
