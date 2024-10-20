@@ -10,6 +10,13 @@
 //   })
 // })
 
+  // socket.on('invite', ({ roomId, userCardId }) => {
+  //   console.log(roomId, userCardId);
+  //   const userCardSocketId = userData[userCardId].socketId;
+  //   io.to(userCardSocketId).emit('joinRoom', roomId);
+
+  //   io.to(roomId).emit('message', {text: 'room1입니다.'});
+  // });
 const rooms = {};
 
 // 방을 생성하는 함수

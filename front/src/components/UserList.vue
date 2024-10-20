@@ -32,8 +32,8 @@ const props = defineProps({
 const generateRoomName = () => {
   const user = String(props.user.id);
   const userCard = String(props.userCard.id);
-  if (user >= userCard) return user+'_'+userCard;
-  else return userCard+'_'+user;
+  if (user >= userCard) return user+'_'+userCard+'_'+user;
+  else return userCard+'_'+user+'_'+user;
 };
 
 </script>

@@ -25,26 +25,24 @@
 
   // 컴포넌트가 마운트될 때 기본 방에 입장
   onMounted(() => {
+    // url에 있는 roomName+user 저장
     const roomId = route.params.roomId;
-    console.log('roomId: ', roomId);
-    joinRoom(roomId);
+    const roomName = roomId.split('_')[0] + roomId.split('_')[1];
+    console.log('roomName: ', roomName);
+    joinRoom(roomName);
   });
 
   // 서버로 메시지를 보내는 함수
   const sendMessage = () => {
     if (Text.value.trim() !== '') {
       messages.value[currentRoom.value].push(Text.value);
-      console.log(messages.value);
-      console.log(messageStacks.value);
-      
       
       roomsocket.emit('message', {
         message: Text.value,
-        room: currentRoom.value,
         stack: messageStacks.value[currentRoom.value]
       });
-      console.log(`Sent message, room, stack: 
-      ${Text.value} ${currentRoom.value} ${messageStacks.value[currentRoom.value]}`);
+      console.log(`Sent message, roomId, stack: 
+      ${Text.value} ${messageStacks.value[currentRoom.value]}`);
       Text.value = '';
       messageStacks.value[currentRoom.value] += 1;
     }
@@ -54,6 +52,14 @@
     console.log('Connected to server');
 
   });
+
+  roomsocket.on('enterRoom', (data) => {
+    const { roomMessages, roomStack } = data;
+    console.log('roomMessages', roomMessages);
+    console.log('roomStack', roomStack);
+    
+  });
+
   roomsocket.on('receive', (data) => {
     console.log(data);
     

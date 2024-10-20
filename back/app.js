@@ -11,52 +11,53 @@ const io = require('socket.io')(http, {cors: { origin: "*" }});
 
 let userData = {};
 let rooms = {};
+let roomName = '';
+let userId = '';
 
 const room = io.of("/room");
 
-let roomMessages = {}; // 방별 메시지 목록 관리
-let messageStacks = {}; // 방별 메시지 스택 관리
-
 // room 네임스페이스
 room.on('connection', (socket) => {
-  socket.on('joinRoom', ( roomId ) => {   
-    socket.join(roomId);
+  socket.on('joinRoom', (roomId) => {   
+    const roomIdParts = roomId.split('_');
+    roomName = roomIdParts[0] + roomIdParts[1];
+    userId = roomIdParts[2];
+    socket.join(roomName);
 
     // 사용자가 속한 방 확인 { '아이디', '방' }
-    console.log(socket.rooms);
+    // console.log(socket.rooms);
 
     // 방 이름 없으면 새 방 만들고
-    // 있으면 room 주기
-    if (!rooms[roomId]) {
-      rooms[roomId] = [];
-      room[roomId] = {
+    // 있으면 roomMessages, roomStack 주기
+    if (!rooms[roomName]) {
+      rooms[roomName] = [];
+      rooms[roomName] = {
         roomMessages: [],
         roomStack: 0
       }
     }
     else {
       socket.emit('enterRoom', {
-        roomMessages:rooms[roomId].roomMessages, 
-        roomStack: rooms[roomId].roomStack })
+        roomMessages:rooms[roomName].roomMessages, 
+        roomStack: rooms[roomName].roomStack 
+      })
     }
-    console.log('rooms', rooms);
   });
 
-  // socket.on('invite', ({ roomId, userCardId }) => {
-  //   console.log(roomId, userCardId);
-  //   const userCardSocketId = userData[userCardId].socketId;
-  //   io.to(userCardSocketId).emit('joinRoom', roomId);
+  // 메시지 받았을 때
+  socket.on('message', ({ message, stack }) => {
+    console.log('받은거', message, stack);
 
-  //   io.to(roomId).emit('message', {text: 'room1입니다.'});
-  // });
+    // 메시지 저장, 스택 +1
+    rooms[roomName]['roomMessages'].push({user: message})
+    rooms[roomName]['roomStack'] += 1;
+    console.log('rooms', rooms);
+    
+    // 다른 사용자에게 메시지 보내기
+    socket.to(roomName).emit('receive', {message, roomName, stack});
+    console.log(`Message sent to room ${roomName}, message: ${message}, stack: ${rooms[roomName]['roomStack']}`);
 
-  socket.on('message', ({ message, room, stack }) => {
-    console.log(message, room, stack);
-    stack++;
-
-    socket.to(room).emit('receive', {message, room, stack});
-    console.log(`Message sent to room ${room}, message: ${message}, stack: ${stack}`);
-
+    // 스택이 다르면 그 간격만큼 쌓인 메시지 보내기
   })
 });
 
