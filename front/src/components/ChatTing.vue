@@ -90,7 +90,7 @@
         </li>
       </ul>
       <div class="chatInputBox">
-        <input class="chatInput" placeholder="메시지를 입력하세요" v-model="Text" />
+        <input class="chatInput" placeholder="메시지를 입력하세요" v-model="Text" v-on:keyup.enter="sendMessage"/>
         <button class="chatSendBtn" @click="sendMessage">보내기</button>
       </div>
     </div>
@@ -111,7 +111,11 @@
  flex-direction: column;
  max-height: 500px;
  overflow-y: auto;
+ -ms-overflow-style: none;
  margin: 40px 0px;
+}
+.chatUl::-webkit-scrollbar {
+  display: none;
 }
 .chatLi {
   list-style-type: none;
