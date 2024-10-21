@@ -15,13 +15,15 @@
   const joinRoom = (roomId) => {
     // messages 객체에는 user땐 이름으로 저장함
     const roomName = roomId.split('_')[0] + roomId.split('_')[1];
-    if (!messages.value[roomName]) {
-      messages.value[roomName] = [];
-    }
+
     if (!messageStacks.value[roomName]) {
+      messages.value[roomName] = [];
       messageStacks.value[roomName] = 0;
     }
-    roomsocket.emit('joinRoom', roomId); // 서버에 방 입장 요청
+    let stack = messageStacks.value[roomName]; 
+    console.log('stack', stack);
+    
+    roomsocket.emit('joinRoom', { roomId, stack }); // 서버에 방 입장 요청
   };
 
   // 컴포넌트가 마운트될 때 기본 방에 입장
@@ -64,14 +66,11 @@
 
   roomsocket.on('receive', (data) => {
     console.log(data);
-    const { message, room, stack } = data;
-    
-    if (!messages.value[room]) {
-      messages.value[room] = [];
-    }
-    messages.value[room].push(message);
-    messageStacks.value[room] = stack;  // 서버의 스택 번호로 업데이트
-    console.log(`Received room message, room, stack: ${message} ${room} ${stack}`);
+    const { message, roomName } = data;
+ 
+    messages.value[roomName].push(message);
+    messageStacks.value[roomName] += 1;
+    console.log(`Received other uer message: ${message}`);
   });
 
 </script> 

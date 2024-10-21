@@ -18,14 +18,11 @@ const room = io.of("/room");
 
 // room 네임스페이스
 room.on('connection', (socket) => {
-  socket.on('joinRoom', (roomId) => {   
+  socket.on('joinRoom', ({ roomId, stack}) => {
     const roomIdParts = roomId.split('_');
     roomName = roomIdParts[0] + roomIdParts[1];
     userId = roomIdParts[2];
     socket.join(roomName);
-
-    // 사용자가 속한 방 확인 { '아이디', '방' }
-    // console.log(socket.rooms);
 
     // 방 이름 없으면 새 방 만들고
     // 있으면 roomMessages, roomStack 주기
@@ -37,8 +34,11 @@ room.on('connection', (socket) => {
       }
     }
     else {
+      const stackDiff = rooms[roomName].roomStack - stack;
+
       socket.emit('enterRoom', {
-        roomMessages:rooms[roomName].roomMessages, 
+        // roomMessages:rooms[roomName].roomMessages,
+        roomMessages: stackDiff > 0 ? rooms[roomName].roomMessages.slice(-stackDiff) : [],
         roomStack: rooms[roomName].roomStack 
       })
     }

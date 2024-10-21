@@ -19,6 +19,9 @@
   // });
 const rooms = {};
 
+// 사용자가 속한 방 확인 { '아이디', '방' }
+    // console.log(socket.rooms);
+    
 // 방을 생성하는 함수
 const createRoom = (roomId) => {
   if (!rooms[roomId]) {
