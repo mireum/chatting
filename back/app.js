@@ -18,7 +18,7 @@ const room = io.of("/room");
 
 // room 네임스페이스
 room.on('connection', (socket) => {
-  socket.on('joinRoom', ({ roomId, stack}) => {
+  socket.on('joinRoom', ({ roomId, stack }) => {
     const roomIdParts = roomId.split('_');
     roomName = roomIdParts[0] + roomIdParts[1];
     userId = roomIdParts[2];
@@ -35,29 +35,24 @@ room.on('connection', (socket) => {
     }
     else {
       const stackDiff = rooms[roomName].roomStack - stack;
-
       socket.emit('enterRoom', {
-        // roomMessages:rooms[roomName].roomMessages,
         roomMessages: stackDiff > 0 ? rooms[roomName].roomMessages.slice(-stackDiff) : [],
-        roomStack: rooms[roomName].roomStack 
+        roomStack: rooms[roomName].roomStack,
       })
     }
   });
 
   // 메시지 받았을 때
-  socket.on('message', ({ message }) => {
+  socket.on('message', ({ message, user }) => {
     console.log('받은메시지', message);
-
+    
     // 메시지 저장, 스택 +1
-    rooms[roomName]['roomMessages'].push({user: message})
+    rooms[roomName]['roomMessages'].push({text: message, user});
     rooms[roomName]['roomStack'] += 1;
     console.log('rooms', rooms);
     
     // 다른 사용자에게 메시지 보내기
-    socket.to(roomName).emit('receive', {message, roomName});
-    console.log(`Message sent to room ${roomName}, message: ${message}`);
-
-    // 스택이 다르면 그 간격만큼 쌓인 메시지 보내기
+    socket.to(roomName).emit('receive', {message: {text: message, user}, roomName});
   })
 });
 
