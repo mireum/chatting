@@ -13,12 +13,13 @@
 
   // 방에 입장하는 함수
   const joinRoom = (roomId) => {
-    currentRoom.value = roomId;
-    if (!messages.value[roomId]) {
-      messages.value[roomId] = [];
+    // messages 객체에는 user땐 이름으로 저장함
+    const roomName = roomId.split('_')[0] + roomId.split('_')[1];
+    if (!messages.value[roomName]) {
+      messages.value[roomName] = [];
     }
-    if (!messageStacks.value[roomId]) {
-      messageStacks.value[roomId] = 0;
+    if (!messageStacks.value[roomName]) {
+      messageStacks.value[roomName] = 0;
     }
     roomsocket.emit('joinRoom', roomId); // 서버에 방 입장 요청
   };
@@ -29,7 +30,9 @@
     const roomId = route.params.roomId;
     const roomName = roomId.split('_')[0] + roomId.split('_')[1];
     console.log('roomName: ', roomName);
-    joinRoom(roomName);
+    currentRoom.value = roomName;
+    // user 알려줘야하므로 원래 url 보내줌
+    joinRoom(roomId);
   });
 
   // 서버로 메시지를 보내는 함수
@@ -50,22 +53,22 @@
   
   roomsocket.on('connect', () => {
     console.log('Connected to server');
-
   });
 
   roomsocket.on('enterRoom', (data) => {
     const { roomMessages, roomStack } = data;
     console.log('roomMessages', roomMessages);
     console.log('roomStack', roomStack);
-    
+    console.log('메시지목록', messages.value[currentRoom.value]);
+    roomMessages.forEach((message) => {
+      messages.value[currentRoom.value].push(Object.values(message)[0]);
+    });
+    messageStacks.value[currentRoom.value] = roomStack;
   });
 
   roomsocket.on('receive', (data) => {
     console.log(data);
-    
     const { message, room, stack } = data;
-    console.log('1',message.value);
-    console.log('2', message.value[room]);
     
     if (!messages.value[room]) {
       messages.value[room] = [];
