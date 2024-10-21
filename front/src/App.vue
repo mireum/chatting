@@ -38,7 +38,6 @@ const getUserList = async () => {
     // 나는 빼고 chatList에 넣기
     const list = Object.values(res.data.userList)
     chatList.value = list.filter(u => u.id !== user.value.id);
-    // console.log(chatList.value);
   } catch (err) {
     console.error(err);
   }

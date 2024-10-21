@@ -90,7 +90,7 @@
         </li>
       </ul>
       <div class="chatInputBox">
-        <input class="chatInput" v-model="Text" />
+        <input class="chatInput" placeholder="메시지를 입력하세요" v-model="Text" />
         <button class="chatSendBtn" @click="sendMessage">보내기</button>
       </div>
     </div>
@@ -101,10 +101,6 @@
 <style>
 .chatContainer {
   width: 1200px;
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
-  /* margin: 0 auto; */
 }
 .chatBox {
   width: 800px;
@@ -141,7 +137,7 @@
 .chatInputBox {
   width: 800px;
   display: flex;
-  height: 2rem;
+  height: 2.3rem;
 }
 .chatInput {
   width: 600px;
@@ -151,6 +147,7 @@
   border: 1px solid #aaa;
   border-radius: 10px 0px 0px 10px;
   border-right: none;
+  padding: 10px 14px;
 }
 .chatInput:focus {
   outline: none;

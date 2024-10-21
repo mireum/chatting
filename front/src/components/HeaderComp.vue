@@ -1,8 +1,10 @@
 <template>
   <header>
-    <div class="logoBox">
-      <img alt="Vue logo" src="../assets/logo.png" />
-    </div>
+    <RouterLink to="/">
+      <div class="logoBox">
+        <img alt="Vue logo" src="../assets/logo.png" />
+      </div>
+    </RouterLink>
     <div class="loginBox">
       <KakaoLogin v-if="!user || whichLogin == 'kakao'" @loginSuccess="handleKakaoLogin" />
       <NaverLogin v-if="!user || whichLogin == 'naver'" @loginSuccess="handleNaverLogin" />
