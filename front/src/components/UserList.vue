@@ -1,11 +1,5 @@
 <script setup>
 import { defineProps } from 'vue';
-// ref
-// import io from 'socket.io-client';
-// import { useRouter } from 'vue-router';
-
-// const router = useRouter();
-// const roomsocket = io('http://localhost:8000/room');
 
 const props = defineProps({
   user: {
@@ -18,24 +12,12 @@ const props = defineProps({
   },
 });
 
-// const socket = ref(null);
-// const roomId = ref('room1');
-// const joinRoom = (userId, userCardId) => {
-//   router.push('/roomId')
-//   const room = io('http://localhost:8000/room');
-//   room.emit('joinRoom', { roomId:roomId.value });
-//   room.emit('invite', { roomId:roomId.value, userCardId:userCardId })
-//   room.on('message', (data) => {
-//     console.log(data);
-//   })
-// };
 const generateRoomName = () => {
   const user = String(props.user.id);
   const userCard = String(props.userCard.id);
   if (user >= userCard) return user+'_'+userCard+'_'+user;
   else return userCard+'_'+user+'_'+user;
 };
-
 </script>
 
 <template>
@@ -45,7 +27,6 @@ const generateRoomName = () => {
       <p>{{ props.userCard.name }}</p>
     </div>
     <div class="chatBtnBox">
-      <!-- <button class="chatBtn" @click="joinRoom(props.user.id, props.userCard.id)">채팅하기</button> -->
       <button class="chatBtn" @click="() => {$router.push(`/${generateRoomName()}`)}">채팅하기</button>
     </div>
   </div>
@@ -75,7 +56,7 @@ const generateRoomName = () => {
   border-radius: 50%;
 }
 .chatBtnBox {
-  padding-right: 20px;
+  padding-right: 16px;
 }
 .chatBtn {
   width: 100px;

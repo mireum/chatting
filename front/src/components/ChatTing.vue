@@ -78,39 +78,91 @@
 </script> 
 
 <template>
-  <p>상대방이름</p>
-  <input v-model="Text" />
-  <button @click="sendMessage">Send a message</button>
-  <ul>
-    <li 
-      v-for="(message, index) in messages[currentRoom]" 
-      :key="index"
-      :class="{ 'opposit-message': message.opposit, 'my-message': !message.opposit }"
-    >
-    {{ message.text }}
-    </li>
-  </ul>
+  <div class="chatContainer">
+    <div class="chatBox">
+      <ul class="chatUl">
+        <li class="chatLi chatWindow" 
+          v-for="(message, index) in messages[currentRoom]" 
+          :key="index"
+          :class="{ 'opposit-message': message.opposit, 'my-message': !message.opposit }"
+        >
+        {{ message.text }}
+        </li>
+      </ul>
+      <div class="chatInputBox">
+        <input class="chatInput" v-model="Text" />
+        <button class="chatSendBtn" @click="sendMessage">보내기</button>
+      </div>
+    </div>
+
+  </div>
 </template>
 
 <style>
+.chatContainer {
+  width: 1200px;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  /* margin: 0 auto; */
+}
+.chatBox {
+  width: 800px;
+  margin: 0 auto;
+}
+.chatUl {
+ display: flex; 
+ flex-direction: column;
+ max-height: 500px;
+ overflow-y: auto;
+ margin: 40px 0px;
+}
+.chatLi {
+  list-style-type: none;
+}
+.chatWindow {
+  display: inline-block;
+  border-radius: 10px;
+  margin: 10px 0;
+  max-width: 60%;
+  letter-spacing: 1px;
+  padding: 10px 20px 10px 20px;
+}
 .opposit-message {
   background-color: #f1f1f1;
   text-align: left;
-  padding: 10px;
-  border-radius: 10px;
-  margin: 10px 0;
-  max-width: 60%;
-  align-self: flex-start; /* 왼쪽 정렬 */
+  align-self: flex-start;
 }
-
 .my-message {
   background-color: #dcf8c6;
   text-align: right;
-  padding: 10px;
-  border-radius: 10px;
-  margin: 10px 0;
-  max-width: 60%;
-  align-self: flex-end; /* 오른쪽 정렬 */
+  align-self: flex-end;
 }
-
+.chatInputBox {
+  width: 800px;
+  display: flex;
+  height: 2rem;
+}
+.chatInput {
+  width: 600px;
+  font-size: 16px;
+  flex: 1;
+  margin-left: 30px;
+  border: 1px solid #aaa;
+  border-radius: 10px 0px 0px 10px;
+  border-right: none;
+}
+.chatInput:focus {
+  outline: none;
+}
+.chatSendBtn {
+  background-color: rgba(95, 177, 180, 0.473);
+  width: 100px;
+  border: 1px solid #aaa;
+  border-radius: 0px 10px 10px 0px;
+  cursor: pointer;
+}
+.chatSendBtn:hover {
+  background-color: indianred;
+}
 </style>
