@@ -40,12 +40,8 @@
     if (Text.value.trim() !== '') {
       messages.value[currentRoom.value].push(Text.value);
       
-      roomsocket.emit('message', {
-        message: Text.value,
-        stack: messageStacks.value[currentRoom.value]
-      });
-      console.log(`Sent message, roomId, stack: 
-      ${Text.value} ${messageStacks.value[currentRoom.value]}`);
+      roomsocket.emit('message', { message: Text.value });
+      console.log(`Sent message: ${Text.value}`);
       Text.value = '';
       messageStacks.value[currentRoom.value] += 1;
     }
@@ -78,19 +74,10 @@
     console.log(`Received room message, room, stack: ${message} ${room} ${stack}`);
   });
 
-
-  roomsocket.on('updateMessages', (data) => {
-    const { room, newMessages } = data;
-    console.log(`Updating messages for room: ${room}`);
-    messages.value[room] = newMessages;
-    messageStacks.value[room] = newMessages.length; // 스택 맞춤
-    messages.value[currentRoom.value].push(Text.value);
-    Text.value = '';
-  });
 </script> 
 
 <template>
-  <p>상대방이름 {{ roomName }}</p>
+  <p>상대방이름</p>
   <input v-model="Text" />
   <button @click="sendMessage">Send a message</button>
   <ul>

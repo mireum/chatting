@@ -57,22 +57,18 @@ import UserList from './components/UserList.vue';
 
   // 서버로 메시지를 보내는 함수
   const sendMessage = () => {
-    if (Text.value.trim() !== '') {
-      messages.value[currentRoom.value].push(Text.value);
-      console.log(messages.value);
-      console.log(messageStacks.value);
-      
-      
-      roomsocket.emit('message', {
-        message: Text.value,
-        room: currentRoom.value,
-        stack: messageStacks.value[currentRoom.value]
-      });
-      console.log(`Sent message, room, stack: 
-      ${Text.value} ${currentRoom.value} ${messageStacks.value[currentRoom.value]}`);
-      Text.value = '';
-      messageStacks.value[currentRoom.value] += 1;
-    }
+  if (Text.value.trim() !== '') {
+    messages.value[currentRoom.value].push(Text.value);
+    
+    roomsocket.emit('message', {
+      message: Text.value,
+      stack: messageStacks.value[currentRoom.value]
+    });
+    console.log(`Sent message, stack: 
+    ${Text.value} ${messageStacks.value[currentRoom.value]}`);
+    Text.value = '';
+    messageStacks.value[currentRoom.value] += 1;
+  }
   };
 
   // 임시

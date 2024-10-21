@@ -45,8 +45,8 @@ room.on('connection', (socket) => {
   });
 
   // 메시지 받았을 때
-  socket.on('message', ({ message, stack }) => {
-    console.log('받은거', message, stack);
+  socket.on('message', ({ message }) => {
+    console.log('받은메시지', message);
 
     // 메시지 저장, 스택 +1
     rooms[roomName]['roomMessages'].push({user: message})
@@ -54,8 +54,8 @@ room.on('connection', (socket) => {
     console.log('rooms', rooms);
     
     // 다른 사용자에게 메시지 보내기
-    socket.to(roomName).emit('receive', {message, roomName, stack});
-    console.log(`Message sent to room ${roomName}, message: ${message}, stack: ${rooms[roomName]['roomStack']}`);
+    socket.to(roomName).emit('receive', {message, roomName});
+    console.log(`Message sent to room ${roomName}, message: ${message}`);
 
     // 스택이 다르면 그 간격만큼 쌓인 메시지 보내기
   })
