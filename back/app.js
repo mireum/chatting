@@ -3,7 +3,7 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const path = require('path');
 const cors = require('cors');
-const mysql = require('mysql2')
+// const mysql = require('mysql2')
 
 const app = express();
 const http = require('http').createServer(app);
@@ -59,16 +59,17 @@ room.on('connection', (socket) => {
 dotenv.config();
 
 // mysql 연결
-const conn = mysql.createConnection({ 
-  host : 'localhost',  
-  user : 'root',
-  password : process.env.MYSQLPASS,
-  database : 'online_db'
-});
+// const conn = mysql.createConnection({ 
+//   host : 'localhost',  
+//   user : 'root',
+//   password : process.env.MYSQLPASS,
+//   database : 'online_db'
+// });
 
-conn.connect();
+// conn.connect();
 // module.exports = conn;
-module.exports = { userData, conn };
+// module.exports = { userData, conn };
+module.exports = { userData };
 
 // 라우터 가져오기
 const mainRouter = require('./routes/index');
