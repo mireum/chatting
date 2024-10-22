@@ -37,7 +37,7 @@ const startPollingUserList = () => {
 };
 const getUserList = async () => {
   try {
-    const res = await axios.get(`http://localhost:8000/userList`);
+    const res = await axios.get(`${process.env.VUE_APP_server_url}/userList`);
     
     // 나는 빼고 chatList에 넣기
     const list = Object.values(res.data.userList)

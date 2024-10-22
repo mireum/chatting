@@ -18,7 +18,7 @@ const getKakaoToken = async (code) => {
     const data = {
       grant_type: "authorization_code",
       client_id: "dbe0b0cf6f38d1793f0cd63f8b62c875", // REST API 키
-      redirect_uri: "http://localhost:8080/",
+      redirect_uri: `${process.env.VUE_APP_front_url}/`,
       code: code,
     };
 
@@ -64,7 +64,7 @@ export default {
     // 1. 인가 코드 얻기
     kakaoLogin() {
       window.Kakao.Auth.authorize({
-        redirectUri: "http://localhost:8080/",
+        redirectUri: `${process.env.VUE_APP_front_url}/`,
       });
     },
 
@@ -93,7 +93,7 @@ export default {
       this.$emit('loginSuccess', this.user);
       // 서버에 유저 정보 전달
       try {
-        await axios.post('http://localhost:8000/userInfo', userInfo)
+        await axios.post(`${process.env.VUE_APP_server_url}/userInfo`, userInfo)
       } catch (err) {
         console.error(err);
       }

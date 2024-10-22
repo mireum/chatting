@@ -23,7 +23,7 @@ export default{
   mounted() {
     this.naverLogin = new window.naver.LoginWithNaverId({
       clientId: "dV_7BO34dzC4GTolRjVY",
-      callbackUrl: "http://localhost:8080/",
+      callbackUrl: process.env.VUE_APP_front_url,
       isPopup: false,
       loginButton: {
         color: "green", type: 2, height: 30},  // 로그인 버튼의 타입을 지정 
@@ -45,7 +45,7 @@ export default{
         this.$emit('loginSuccess', this.user);
         // 서버에 유저 정보 전달
         try {
-          const result = await axios.post('http://localhost:8000/userInfo', userInfo)
+          const result = await axios.post(`${process.env.VUE_APP_server_url}/userInfo`, userInfo)
           if (!result.data) { console.log(result); }
         } catch (err) {
           console.error(err);

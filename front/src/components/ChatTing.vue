@@ -2,7 +2,7 @@
   import { io } from 'socket.io-client';
   import { onMounted, ref, defineProps } from 'vue';
   
-  const roomsocket = io('http://localhost:8000/room');
+  const roomsocket = io(`${process.env.VUE_APP_server_url}/room`);
 
   const Text = ref('');
   const userId = ref('');
@@ -23,7 +23,7 @@
       messageStacks.value[roomName] = 0;
     }
     let stack = messageStacks.value[roomName]; 
-    roomsocket.emit('joinRoom', { roomId, stack }); // 서버에 방 입장 요청
+    roomsocket.emit('joinRoom', { roomId, stack });
   };
 
   // 컴포넌트가 마운트될 때 기본 방에 입장

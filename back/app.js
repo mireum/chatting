@@ -7,7 +7,12 @@ const cors = require('cors');
 
 const app = express();
 const http = require('http').createServer(app);
-const io = require('socket.io')(http, {cors: { origin: "*" }});
+const io = require('socket.io')(http, {cors: {
+  // 실제 도메인으로
+  origin: "*",
+  methods: ["GET", "POST"],
+  credentials: true
+}});
 
 let userData = {};
 let rooms = {};
@@ -84,7 +89,8 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(cors({
-  origin: 'http://localhost:8080',
+  // 실제 도메인으로
+  origin: process.env.VUE_APP_front_url,
   methods: ['GET', 'POST', 'OPTIONS'],
   credentials: true
 }));
