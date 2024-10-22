@@ -9,7 +9,7 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http, {cors: {
   // 실제 도메인으로
-  origin: "*",
+  origin: "https://jamesonchat.vercel.app/",
   methods: ["GET", "POST"],
   credentials: true
 }});
