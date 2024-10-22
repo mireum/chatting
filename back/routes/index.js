@@ -1,6 +1,7 @@
 const express = require('express');
-const { userData } = require('../app');
 const router = express.Router();
+
+let userData = {};
 
 router.get('/', (req, res) => {
   res.json({
