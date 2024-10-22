@@ -40,12 +40,9 @@
   // 서버로 메시지를 보내는 함수
   const sendMessage = () => {
     if (Text.value.trim() !== '') {
-      messages.value[currentRoom.value].push({text:Text.value, opposit: false});
-      
       roomsocket.emit('message', { message: Text.value, user:userId.value });
       console.log(`Sent message: ${Text.value}`);
       Text.value = '';
-      messageStacks.value[currentRoom.value] += 1;
     }
   };
   
@@ -57,16 +54,23 @@
     const { roomMessages, roomStack } = data;
     // console.log('roomMessages', roomMessages);
     // console.log('메시지목록', messages.value[currentRoom.value]);
-    roomMessages.forEach((message) => {      
+    roomMessages.forEach((message) => { 
+      console.log(message);
+           
       if (message.user== userId.value) {
-        messages.value[currentRoom.value].push({ text: message.text, opposit: false });
+        messages.value[currentRoom.value].push({ ...message, opposit: false });
       }
       else {
-        messages.value[currentRoom.value].push({ text: message.text, opposit: true });
+        messages.value[currentRoom.value].push({ ...message, opposit: true });
       }
     });
-    // console.log('새로운메시지목록', messages.value[currentRoom.value]);
     messageStacks.value[currentRoom.value] = roomStack;
+  });
+
+  roomsocket.on('mirror', (data) => {
+    const { message, roomName } = data;
+    messages.value[roomName].push({ ...message, opposit: false });
+    messageStacks.value[roomName] += 1;
   });
 
   roomsocket.on('receive', (data) => {
@@ -86,7 +90,7 @@
           :key="index"
           :class="{ 'opposit-message': message.opposit, 'my-message': !message.opposit }"
         >
-        {{ message.text }}
+        {{ message.text }} <span class="message-time">{{ message.time }}</span>
         </li>
       </ul>
       <div class="chatInputBox">
@@ -165,5 +169,10 @@
 }
 .chatSendBtn:hover {
   background-color: indianred;
+}
+.message-time {
+  font-size: 0.8rem;
+  color: gray;
+  margin-left: 10px;
 }
 </style>

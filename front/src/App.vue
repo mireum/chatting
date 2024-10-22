@@ -1,7 +1,6 @@
 <template>
   <HeaderComp @isLogin="handleUser"></HeaderComp>
   <div class="container">
-
     <div v-if="!user">
       <h2 class="announceH2">로그인 후 이용해주세요!</h2>
     </div>
@@ -25,12 +24,11 @@ import { ref } from 'vue';
 import HeaderComp from './components/HeaderComp.vue';
 import UserList from './components/UserList.vue';
 import axios from 'axios';
-// import { io } from 'socket.io-client';
 import { RouterView } from 'vue-router';
 
 const user = ref(null);
 const chatList = ref(null);
-const refreshInterval = 3000; // 5초마다
+const refreshInterval = 3000; // 3초마다
 
 const startPollingUserList = () => {
   setInterval(async () => {
@@ -54,8 +52,6 @@ const handleUser = (userInfo) => {
   user.value = userInfo;
   // 이건 받아올 다른 사용자
   getUserList();
-  // socket 연결
-  // const socket = io('http://localhost:8000/');
   startPollingUserList();
 }
 </script>

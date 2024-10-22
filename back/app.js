@@ -45,14 +45,18 @@ room.on('connection', (socket) => {
   // 메시지 받았을 때
   socket.on('message', ({ message, user }) => {
     console.log('받은메시지', message);
-    
     // 메시지 저장, 스택 +1
-    rooms[roomName]['roomMessages'].push({text: message, user});
+    const time = new Date().toLocaleTimeString('ko-KR', { hour: 'numeric', minute: 'numeric' });;
+    rooms[roomName]['roomMessages'].push({text: message, user, time});
     rooms[roomName]['roomStack'] += 1;
     console.log('rooms', rooms);
+
+    // 내가 보낸 메시지 미러링
+    const lastMessage = rooms[roomName].roomMessages[rooms[roomName].roomMessages.length - 1];
+    socket.emit('mirror', { message: lastMessage, roomName })
     
     // 다른 사용자에게 메시지 보내기
-    socket.to(roomName).emit('receive', {message: {text: message, user}, roomName});
+    socket.to(roomName).emit('receive', { message: lastMessage, roomName });
   })
 });
 
