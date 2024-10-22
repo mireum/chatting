@@ -25,12 +25,18 @@ import { ref } from 'vue';
 import HeaderComp from './components/HeaderComp.vue';
 import UserList from './components/UserList.vue';
 import axios from 'axios';
-import { io } from 'socket.io-client';
+// import { io } from 'socket.io-client';
 import { RouterView } from 'vue-router';
 
 const user = ref(null);
 const chatList = ref(null);
+const refreshInterval = 3000; // 5초마다
 
+const startPollingUserList = () => {
+  setInterval(async () => {
+    await getUserList(); // 사용자 리스트 불러오기
+  }, refreshInterval);
+};
 const getUserList = async () => {
   try {
     const res = await axios.get(`http://localhost:8000/userList`);
@@ -49,11 +55,8 @@ const handleUser = (userInfo) => {
   // 이건 받아올 다른 사용자
   getUserList();
   // socket 연결
-  const socket = io('http://localhost:8000/');
-  socket.on('connect', () => {    
-    socket.emit('register', {userId: user.value.id });
-
-  })
+  // const socket = io('http://localhost:8000/');
+  startPollingUserList();
 }
 </script>
 

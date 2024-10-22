@@ -12,7 +12,7 @@ router.post('/userInfo', (req, res) => {
   const { id, name, profile_image } = req.body;
 
   userData[id] = { id, name, profile_image, socketId:null };
-  // console.log('userData', userData);
+  console.log('userData', userData);
   res.json({
     flag: true,
     message: 'userData saved!'
