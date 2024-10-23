@@ -41,13 +41,13 @@
   const sendMessage = () => {
     if (Text.value.trim() !== '') {
       roomsocket.emit('message', { message: Text.value, user:userId.value });
-      console.log(`Sent message: ${Text.value}`);
+      // console.log(`Sent message: ${Text.value}`);
       Text.value = '';
     }
   };
   
   roomsocket.on('connect', () => {
-    console.log('Connected to server');
+    // console.log('Connected to server');
   });
 
   roomsocket.on('enterRoom', (data) => {
@@ -55,7 +55,7 @@
     // console.log('roomMessages', roomMessages);
     // console.log('메시지목록', messages.value[currentRoom.value]);
     roomMessages.forEach((message) => { 
-      console.log(message);
+      // console.log(message);
            
       if (message.user== userId.value) {
         messages.value[currentRoom.value].push({ ...message, opposit: false });
