@@ -43,6 +43,10 @@
       roomsocket.emit('message', { message: Text.value, user:userId.value });
       // console.log(`Sent message: ${Text.value}`);
       Text.value = '';
+      this.$nextTick(() => {
+        const SCROLL_AREA = this.$refs.scrollArea;
+      SCROLL_AREA.scrollTo({ top: separateSettingArea.scrollHeight, behavior: 'smooth',});    
+      })
     }
   };
   
@@ -84,7 +88,7 @@
 <template>
   <div class="chatContainer">
     <div class="chatBox">
-      <ul class="chatUl">
+      <ul class="chatUl" ref="scrollArea">
         <li class="chatLi chatWindow" 
           v-for="(message, index) in messages[currentRoom]" 
           :key="index"
@@ -113,7 +117,7 @@
 .chatUl {
  display: flex; 
  flex-direction: column;
- max-height: 500px;
+ height: 400px;
  overflow-y: auto;
  -ms-overflow-style: none;
  margin: 40px 0px;
