@@ -12,7 +12,13 @@
   const props = defineProps({
     roomId: String,
   });
-
+  const chatUlRef = ref(null);
+  const scrollToBottom = () => {
+  const chatUl = chatUlRef.value;
+  if (chatUl) {
+    chatUl.scrollTop = chatUl.scrollHeight; // 스크롤을 최하단으로 이동
+  }
+};
   // 방에 입장하는 함수
   const joinRoom = (roomId) => {
     // messages 객체에는 user떼고 이름으로 저장함
@@ -43,10 +49,7 @@
       roomsocket.emit('message', { message: Text.value, user:userId.value });
       // console.log(`Sent message: ${Text.value}`);
       Text.value = '';
-      this.$nextTick(() => {
-        const SCROLL_AREA = this.$refs.scrollArea;
-      SCROLL_AREA.scrollTo({ top: separateSettingArea.scrollHeight, behavior: 'smooth',});    
-      })
+      scrollToBottom();
     }
   };
   
@@ -75,12 +78,14 @@
     const { message, roomName } = data;
     messages.value[roomName].push({ ...message, opposit: false });
     messageStacks.value[roomName] += 1;
+    scrollToBottom();
   });
 
   roomsocket.on('receive', (data) => {
     const { message, roomName } = data;
     messages.value[roomName].push({ ...message, opposit: true });
     messageStacks.value[roomName] += 1;
+    scrollToBottom();
   });
 
 </script> 
@@ -88,7 +93,7 @@
 <template>
   <div class="chatContainer">
     <div class="chatBox">
-      <ul class="chatUl" ref="scrollArea">
+      <ul class="chatUl" ref="chatUlRef">
         <li class="chatLi chatWindow" 
           v-for="(message, index) in messages[currentRoom]" 
           :key="index"
