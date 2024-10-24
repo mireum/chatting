@@ -90,7 +90,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(cors({
   // 실제 도메인으로
-  origin: process.env.VUE_APP_front_url,
+  origin: process.env.front_url,
   methods: ['GET', 'POST', 'OPTIONS'],
   credentials: true
 }));
