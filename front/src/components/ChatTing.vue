@@ -1,6 +1,6 @@
 <script setup>
   import { io } from 'socket.io-client';
-  import { onMounted, ref, defineProps } from 'vue';
+  import { onMounted, ref, defineProps, nextTick } from 'vue';
   
   const roomsocket = io(`${process.env.VUE_APP_server_url}/room`);
 
@@ -12,6 +12,13 @@
   const props = defineProps({
     roomId: String,
   });
+  const chatUlRef = ref(null);
+  const scrollToBottom = () => {
+    const chatUl = chatUlRef.value;
+    if (chatUl) {
+      chatUl.scrollTop = chatUl.scrollHeight; // 스크롤을 최하단으로 이동
+    }
+  };
 
   // 방에 입장하는 함수
   const joinRoom = (roomId) => {
@@ -65,18 +72,27 @@
       }
     });
     messageStacks.value[currentRoom.value] = roomStack;
+    nextTick(() => {
+      scrollToBottom();
+    });
   });
 
   roomsocket.on('mirror', (data) => {
     const { message, roomName } = data;
     messages.value[roomName].push({ ...message, opposit: false });
     messageStacks.value[roomName] += 1;
+    nextTick(() => {
+      scrollToBottom();
+    });
   });
 
   roomsocket.on('receive', (data) => {
     const { message, roomName } = data;
     messages.value[roomName].push({ ...message, opposit: true });
     messageStacks.value[roomName] += 1;
+    nextTick(() => {
+      scrollToBottom();
+    });
   });
 
 </script> 
@@ -84,7 +100,7 @@
 <template>
   <div class="chatContainer">
     <div class="chatBox">
-      <ul class="chatUl">
+      <ul class="chatUl" ref="chatUlRef">
         <li class="chatLi chatWindow" 
           v-for="(message, index) in messages[currentRoom]" 
           :key="index"
