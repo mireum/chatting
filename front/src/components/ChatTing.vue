@@ -72,6 +72,7 @@
       }
     });
     messageStacks.value[currentRoom.value] = roomStack;
+    scrollToBottom();
   });
 
   roomsocket.on('mirror', (data) => {
