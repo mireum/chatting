@@ -1,38 +1,21 @@
-<template>
-  <HeaderComp @isLogin="handleUser"></HeaderComp>
-  <div class="container">
-    <div v-if="!user">
-      <h2 class="announceH2">로그인 후 이용해주세요!</h2>
-    </div>
-    <div v-else>
-      <div v-if="user">
-        <div class="chatTitle">Chats</div>
-        <p class="chatP">접속 중인 사용자</p>
-        <ul>
-          <li class="userLi" v-for="(userCard, index) in chatList" :key="index">
-            <UserList :userCard="userCard" :user="user" />
-          </li>
-        </ul>
-      </div>
-      <RouterView />
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref } from 'vue';
 import HeaderComp from './components/HeaderComp.vue';
 import UserList from './components/UserList.vue';
 import axios from 'axios';
 import { RouterView } from 'vue-router';
+import { chatView } from './chatView';
 
 const user = ref(null);
 const chatList = ref(null);
 const refreshInterval = 3000; // 3초마다
 
+const showChatView = () => {
+  chatView.value = true;
+}
 const startPollingUserList = () => {
   setInterval(async () => {
-    await getUserList(); // 사용자 리스트 불러오기
+    await getUserList();
   }, refreshInterval);
 };
 const getUserList = async () => {
@@ -55,6 +38,27 @@ const handleUser = (userInfo) => {
   startPollingUserList();
 }
 </script>
+
+<template>
+  <HeaderComp @isLogin="handleUser"></HeaderComp>
+  <div class="container">
+    <div v-if="!user">
+      <h2 class="announceH2">로그인 후 이용해주세요!</h2>
+    </div>
+    <div v-else>
+      <div v-if="!chatView">
+        <div class="chatTitle">Chats</div>
+        <p class="chatP">접속 중인 사용자</p>
+        <ul>
+          <li class="userLi" v-for="(userCard, index) in chatList" :key="index">
+            <UserList :userCard="userCard" :user="user" @startChat="showChatView" />
+          </li>
+        </ul>
+      </div>
+      <RouterView v-if="chatView" />
+    </div>
+  </div>
+</template>
 
 <style>
 .container {
@@ -83,4 +87,3 @@ const handleUser = (userInfo) => {
   margin-bottom: 0;
 }
 </style>
-

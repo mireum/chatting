@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
   user: {
@@ -12,9 +12,12 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(['startChat']);
+
 const generateRoomName = () => {
   const user = String(props.user.id);
   const userCard = String(props.userCard.id);
+  emit('startChat');
   if (user >= userCard) return user+'_'+userCard+'_'+user;
   else return userCard+'_'+user+'_'+user;
 };

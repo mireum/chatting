@@ -1,6 +1,6 @@
 <script setup>
   import { io } from 'socket.io-client';
-  import { onMounted, ref, defineProps } from 'vue';
+  import { onMounted, ref, defineProps, nextTick } from 'vue';
   
   const roomsocket = io(`${process.env.VUE_APP_server_url}/room`);
 
@@ -14,11 +14,12 @@
   });
   const chatUlRef = ref(null);
   const scrollToBottom = () => {
-  const chatUl = chatUlRef.value;
-  if (chatUl) {
-    chatUl.scrollTop = chatUl.scrollHeight; // 스크롤을 최하단으로 이동
-  }
-};
+    const chatUl = chatUlRef.value;
+    if (chatUl) {
+      chatUl.scrollTop = chatUl.scrollHeight; // 스크롤을 최하단으로 이동
+    }
+  };
+
   // 방에 입장하는 함수
   const joinRoom = (roomId) => {
     // messages 객체에는 user떼고 이름으로 저장함
@@ -49,21 +50,18 @@
       roomsocket.emit('message', { message: Text.value, user:userId.value });
       // console.log(`Sent message: ${Text.value}`);
       Text.value = '';
-      scrollToBottom();
     }
   };
   
   roomsocket.on('connect', () => {
-    // console.log('Connected to server');
+    console.log('Connected to server');
   });
 
   roomsocket.on('enterRoom', (data) => {
     const { roomMessages, roomStack } = data;
     // console.log('roomMessages', roomMessages);
     // console.log('메시지목록', messages.value[currentRoom.value]);
-    roomMessages.forEach((message) => { 
-      // console.log(message);
-           
+    roomMessages.forEach((message) => {
       if (message.user== userId.value) {
         messages.value[currentRoom.value].push({ ...message, opposit: false });
       }
@@ -72,21 +70,27 @@
       }
     });
     messageStacks.value[currentRoom.value] = roomStack;
-    scrollToBottom();
+    nextTick(() => {
+      scrollToBottom();
+    });
   });
 
   roomsocket.on('mirror', (data) => {
     const { message, roomName } = data;
     messages.value[roomName].push({ ...message, opposit: false });
     messageStacks.value[roomName] += 1;
-    scrollToBottom();
+    nextTick(() => {
+      scrollToBottom();
+    });
   });
 
   roomsocket.on('receive', (data) => {
     const { message, roomName } = data;
     messages.value[roomName].push({ ...message, opposit: true });
     messageStacks.value[roomName] += 1;
-    scrollToBottom();
+    nextTick(() => {
+      scrollToBottom();
+    });
   });
 
 </script> 
@@ -100,7 +104,10 @@
           :key="index"
           :class="{ 'opposit-message': message.opposit, 'my-message': !message.opposit }"
         >
-        {{ message.text }} <span class="message-time">{{ message.time }}</span>
+          <div class="message-name">{{ message.name }}</div>
+          <div class="message-text">{{ message.text }}
+            <span class="message-time">{{ message.time }}</span>
+          </div>
         </li>
       </ul>
       <div class="chatInputBox">
@@ -108,7 +115,6 @@
         <button class="chatSendBtn" @click="sendMessage">보내기</button>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -123,7 +129,8 @@
 .chatUl {
  display: flex; 
  flex-direction: column;
- height: 400px;
+ min-height: 500px;
+ max-height: 500px;
  overflow-y: auto;
  -ms-overflow-style: none;
  margin: 40px 0px;
@@ -143,13 +150,9 @@
   padding: 10px 20px 10px 20px;
 }
 .opposit-message {
-  background-color: #f1f1f1;
-  text-align: left;
   align-self: flex-start;
 }
 .my-message {
-  background-color: #dcf8c6;
-  text-align: right;
   align-self: flex-end;
 }
 .chatInputBox {
@@ -179,6 +182,34 @@
 }
 .chatSendBtn:hover {
   background-color: indianred;
+}
+.message-name {
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  color: #333;
+  background-color: transparent;
+}
+.message-text {
+  font-size: 1rem;
+  padding: 5px 0;
+  padding: 10px 20px;
+  border-radius: 10px;
+  display: inline-block;
+}
+.opposit-message .message-text {
+  background-color: #f1f1f1;
+  text-align: left;
+}
+.my-message .message-text {
+  background-color: #dcf8c6;
+  text-align: right;
+}
+.opposit-message .message-name {
+  text-align: left;
+}
+.my-message .message-name {
+  text-align: right;
 }
 .message-time {
   font-size: 0.8rem;
