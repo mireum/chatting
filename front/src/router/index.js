@@ -5,8 +5,9 @@ import ChatTing from '@/components/ChatTing.vue';
 const routes = [
   // {
   //   path: '/',
-  //   name: 'Home',
+  //   name: 'App',
   //   component: App,
+  //   props: true
   // },
   {
     path: '/:roomId',
