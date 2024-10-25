@@ -9,11 +9,12 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http, {cors: {
   // 실제 도메인으로
-  origin: process.env.front_url,
+  origin: "*",
   methods: ["GET", "POST"],
   credentials: true
 }});
 
+let userData = {};
 let rooms = {};
 let roomName = '';
 let userId = '';
@@ -51,7 +52,7 @@ room.on('connection', (socket) => {
     console.log('받은메시지', message);
     // 메시지 저장, 스택 +1
     const time = new Date().toLocaleTimeString('ko-KR', { hour: 'numeric', minute: 'numeric' });;
-    rooms[roomName]['roomMessages'].push({text: message, user, time});
+    rooms[roomName]['roomMessages'].push({text: message, name:userData[user].name, user, time});
     rooms[roomName]['roomStack'] += 1;
     console.log('rooms', rooms);
 
@@ -77,6 +78,7 @@ dotenv.config();
 // conn.connect();
 // module.exports = conn;
 // module.exports = { userData, conn };
+module.exports = { userData };
 
 // 라우터 가져오기
 const mainRouter = require('./routes/index');
@@ -134,5 +136,3 @@ app.use((err, req, res, next) => {
 http.listen(app.get('port'), () => {
   console.log(app.get('port') + '번에서 서버 실행 중입니다.');
 });
-
-module.exports = http;
