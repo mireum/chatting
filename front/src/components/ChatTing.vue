@@ -61,9 +61,7 @@
     const { roomMessages, roomStack } = data;
     // console.log('roomMessages', roomMessages);
     // console.log('메시지목록', messages.value[currentRoom.value]);
-    roomMessages.forEach((message) => { 
-      console.log(message);
-           
+    roomMessages.forEach((message) => {
       if (message.user== userId.value) {
         messages.value[currentRoom.value].push({ ...message, opposit: false });
       }
@@ -78,8 +76,6 @@
   });
 
   roomsocket.on('mirror', (data) => {
-    console.log(data);
-    
     const { message, roomName } = data;
     messages.value[roomName].push({ ...message, opposit: false });
     messageStacks.value[roomName] += 1;
@@ -133,6 +129,7 @@
 .chatUl {
  display: flex; 
  flex-direction: column;
+ min-height: 500px;
  max-height: 500px;
  overflow-y: auto;
  -ms-overflow-style: none;
