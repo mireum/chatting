@@ -78,6 +78,8 @@
   });
 
   roomsocket.on('mirror', (data) => {
+    console.log(data);
+    
     const { message, roomName } = data;
     messages.value[roomName].push({ ...message, opposit: false });
     messageStacks.value[roomName] += 1;
@@ -106,7 +108,10 @@
           :key="index"
           :class="{ 'opposit-message': message.opposit, 'my-message': !message.opposit }"
         >
-        {{ message.text }} <span class="message-time">{{ message.time }}</span>
+          <div class="message-name">{{ message.name }}</div>
+          <div class="message-text">{{ message.text }}
+            <span class="message-time">{{ message.time }}</span>
+          </div>
         </li>
       </ul>
       <div class="chatInputBox">
@@ -114,7 +119,6 @@
         <button class="chatSendBtn" @click="sendMessage">보내기</button>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -149,13 +153,9 @@
   padding: 10px 20px 10px 20px;
 }
 .opposit-message {
-  background-color: #f1f1f1;
-  text-align: left;
   align-self: flex-start;
 }
 .my-message {
-  background-color: #dcf8c6;
-  text-align: right;
   align-self: flex-end;
 }
 .chatInputBox {
@@ -185,6 +185,34 @@
 }
 .chatSendBtn:hover {
   background-color: indianred;
+}
+.message-name {
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  color: #333;
+  background-color: transparent;
+}
+.message-text {
+  font-size: 1rem;
+  padding: 5px 0;
+  padding: 10px 20px;
+  border-radius: 10px;
+  display: inline-block;
+}
+.opposit-message .message-text {
+  background-color: #f1f1f1;
+  text-align: left;
+}
+.my-message .message-text {
+  background-color: #dcf8c6;
+  text-align: right;
+}
+.opposit-message .message-name {
+  text-align: left;
+}
+.my-message .message-name {
+  text-align: right;
 }
 .message-time {
   font-size: 0.8rem;

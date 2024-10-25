@@ -52,7 +52,7 @@ room.on('connection', (socket) => {
     console.log('받은메시지', message);
     // 메시지 저장, 스택 +1
     const time = new Date().toLocaleTimeString('ko-KR', { hour: 'numeric', minute: 'numeric' });;
-    rooms[roomName]['roomMessages'].push({text: message, user, time});
+    rooms[roomName]['roomMessages'].push({text: message, name:userData[user].name, user, time});
     rooms[roomName]['roomStack'] += 1;
     console.log('rooms', rooms);
 
