@@ -1,5 +1,6 @@
 <script setup>
   import { io } from 'socket.io-client';
+  import { messageStacks } from '@/chatView';
   import { onMounted, ref, defineProps, nextTick } from 'vue';
   
   const roomsocket = io(`${process.env.VUE_APP_server_url}/room`);
@@ -7,7 +8,7 @@
   const Text = ref('');
   const userId = ref('');
   const messages = ref([]);
-  const messageStacks = ref({});
+  // const messageStacks = ref({});
   const currentRoom = ref('');   // 현재 방
   const props = defineProps({
     roomId: String,
