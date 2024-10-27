@@ -16,21 +16,20 @@ const props = defineProps({
 
 const emit = defineEmits(['startChat']);
 const roomName = ref('');
+const unreadMessage = ref(0);
+
 roomName.value = (() => {
   const user = String(props.user.id);
   const userCard = String(props.userCard.id);
   return user >= userCard ? `${user}${userCard}` : `${userCard}${user}`;
 })();
-const unreadMessage = ref(0);
 
-const generateRoomName = () => {
-  const user = String(props.user.id);
-  const userCard = String(props.userCard.id);
-  emit('startChat');
-  return user >= userCard ? `${user}_${userCard}_${user}` : `${userCard}_${user}_${user}`;
+const startPollingUnreadStack = () => {
+  setInterval(async () => {
+    await getUnreadStack();
+  }, 3000);
 };
-
-onMounted( async () => {
+const getUnreadStack = async () => {
   try {
     let stack = 0;
     if (messageStacks.value[roomName.value]) {
@@ -41,6 +40,17 @@ onMounted( async () => {
   } catch (error) {
     console.error(error);
   }
+}
+
+const generateRoomName = () => {
+  const user = String(props.user.id);
+  const userCard = String(props.userCard.id);
+  emit('startChat');
+  return user >= userCard ? `${user}_${userCard}_${user}` : `${userCard}_${user}_${user}`;
+};
+
+onMounted(() => {
+  startPollingUnreadStack();
 })
 </script>
 

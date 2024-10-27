@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import ChatTing from '@/components/ChatTing.vue';
 import { chatView } from '@/chatView';
-// import { getUnreadMessage } from '@/components/UserList.vue';
 
 const routes = [
   {
@@ -20,7 +19,6 @@ router.beforeEach(async (to, from, next) => {
   if (to.path === '/') {
     // '/'로 이동할 때 chatView를 false로 설정
     chatView.value = false;
-    // await getUnreadMessage();
   }
   next();
 });

@@ -8,7 +8,6 @@
   const Text = ref('');
   const userId = ref('');
   const messages = ref([]);
-  // const messageStacks = ref({});
   const currentRoom = ref('');   // 현재 방
   const props = defineProps({
     roomId: String,
@@ -55,7 +54,7 @@
   };
   
   roomsocket.on('connect', () => {
-    console.log('Connected to server');
+    // console.log('Connected to server');
   });
 
   roomsocket.on('enterRoom', (data) => {
