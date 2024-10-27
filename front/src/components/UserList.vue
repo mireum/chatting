@@ -1,5 +1,7 @@
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+import { messageStacks } from '@/chatView';
+import axios from 'axios';
+import { defineProps, defineEmits, onMounted, ref } from 'vue';
 
 const props = defineProps({
   user: {
@@ -13,14 +15,43 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['startChat']);
+const roomName = ref('');
+const unreadMessage = ref(0);
+
+roomName.value = (() => {
+  const user = String(props.user.id);
+  const userCard = String(props.userCard.id);
+  return user >= userCard ? `${user}${userCard}` : `${userCard}${user}`;
+})();
+
+const startPollingUnreadStack = () => {
+  setInterval(async () => {
+    await getUnreadStack();
+  }, 3000);
+};
+const getUnreadStack = async () => {
+  try {
+    let stack = 0;
+    if (messageStacks.value[roomName.value]) {
+      stack = messageStacks.value[roomName.value];
+    }
+    const unread = await axios.post(`${process.env.VUE_APP_server_url}/unreadMessage`, {stack, roomName:roomName.value});
+    unreadMessage.value = unread.data.unreadStack || 0;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 const generateRoomName = () => {
   const user = String(props.user.id);
   const userCard = String(props.userCard.id);
   emit('startChat');
-  if (user >= userCard) return user+'_'+userCard+'_'+user;
-  else return userCard+'_'+user+'_'+user;
+  return user >= userCard ? `${user}_${userCard}_${user}` : `${userCard}_${user}_${user}`;
 };
+
+onMounted(() => {
+  startPollingUnreadStack();
+})
 </script>
 
 <template>
@@ -28,6 +59,7 @@ const generateRoomName = () => {
     <div class="profileBox">
       <img class="profileImg" :src="props.userCard.profile_image" alt="profile_img" />
       <p>{{ props.userCard.name }}</p>
+      <p v-if="unreadMessage !== 0">읽지 않은 메시지: {{ unreadMessage }}</p>
     </div>
     <div class="chatBtnBox">
       <button class="chatBtn" @click="() => {$router.push(`/${generateRoomName()}`)}">채팅하기</button>
@@ -47,11 +79,19 @@ const generateRoomName = () => {
   padding: 14px;
 }
 .profileBox {
-  width: 200px;
   display: flex;
   align-items: center;
   justify-content: space-around;
   padding-left: 10px;
+}
+.profileBox:first-child >p {
+  text-align: center;
+  width: 200px;
+}
+.profileBox >p:nth-child(3) {
+  background-color: #e73803;
+  color: #fff;
+  border-radius: 10px;
 }
 .profileImg {
   width: 70px;

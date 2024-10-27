@@ -1,5 +1,6 @@
 <script setup>
   import { io } from 'socket.io-client';
+  import { messageStacks } from '@/chatView';
   import { onMounted, ref, defineProps, nextTick } from 'vue';
   
   const roomsocket = io(`${process.env.VUE_APP_server_url}/room`);
@@ -7,7 +8,6 @@
   const Text = ref('');
   const userId = ref('');
   const messages = ref([]);
-  const messageStacks = ref({});
   const currentRoom = ref('');   // 현재 방
   const props = defineProps({
     roomId: String,
@@ -48,13 +48,13 @@
   const sendMessage = () => {
     if (Text.value.trim() !== '') {
       roomsocket.emit('message', { message: Text.value, user:userId.value });
-      // console.log(`Sent message: ${Text.value}`);
+      console.log(`Sent message: ${Text.value}`);
       Text.value = '';
     }
   };
   
   roomsocket.on('connect', () => {
-    console.log('Connected to server');
+    // console.log('Connected to server');
   });
 
   roomsocket.on('enterRoom', (data) => {
